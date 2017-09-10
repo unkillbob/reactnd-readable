@@ -1,7 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+# Readable [![Build Status](https://travis-ci.org/unkillbob/reactnd-readable.svg?branch=master)](https://travis-ci.org/unkillbob/reactnd-readable)
 
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+![upvotes](https://media.giphy.com/media/SBoV0Vc3Wk17G/giphy.gif)
 
 ## Table of Contents
 
