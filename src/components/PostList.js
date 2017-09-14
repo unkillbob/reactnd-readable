@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as sortBy from 'lodash/sortBy'
 import moment from 'moment'
-import { fetchPosts } from '../actions'
+import { fetchPosts, updateSortBy } from '../actions'
 import './PostList.css'
 
 const DATE_FORMAT = 'D MMM YY HH:mm'
@@ -17,9 +17,27 @@ class PostList extends Component {
   }
 
   render () {
-    const posts = sortBy(this.props.posts, post => -post.voteScore)
+    const posts = sortBy(this.props.posts, post => -post[this.props.sortBy])
+
     return (
       <div className='post-list'>
+        <div className='post-list-actions'>
+          <button
+            className='post-create'
+            onClick={() => alert('TODO: create posts')}
+          >
+            New Post
+          </button>
+          Sort by:
+          <select
+            className='post-select-sort'
+            value={this.props.sortBy}
+            onChange={event => this.props.updateSortBy(event.target.value)}
+          >
+            <option value='voteScore'>Vote Score</option>
+            <option value='timestamp'>Time</option>
+          </select>
+        </div>
         {posts.map(post => (
           <div className='post' key={post.id}>
             <div className='post-vote-score'>{post.voteScore}</div>
@@ -44,13 +62,14 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ posts }) {
-  return { posts }
+function mapStateToProps ({ posts, sortBy }) {
+  return { posts, sortBy }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchPosts: () => dispatch(fetchPosts())
+    fetchPosts: () => dispatch(fetchPosts()),
+    updateSortBy: sortBy => dispatch(updateSortBy(sortBy))
   }
 }
 
