@@ -7,6 +7,11 @@ export function fetchCategories () {
     .then(data => data.categories)
 }
 
+export function fetchPosts () {
+  return fetch(`${BASE_URL}/posts`, OPTIONS).then(res => res.json())
+}
+
 export default {
-  fetchCategories
+  fetchCategories,
+  fetchPosts
 }

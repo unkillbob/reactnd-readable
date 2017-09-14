@@ -1,0 +1,44 @@
+.post {
+  display: grid;
+  grid-template-columns: 36px auto;
+  margin-bottom: 16px;
+}
+
+.post-vote-score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.post-category {
+  display: inline-block;
+  overflow: hidden;
+  margin-left: 16px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background-color: lightgrey;
+  vertical-align: text-top;
+  text-transform: uppercase;
+  word-break: break-word;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 1.2;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.post-summary {
+  font-size: 12px;
+}
+
+.post-author,
+.post-timestamp {
+  font-weight: bold;
+}
