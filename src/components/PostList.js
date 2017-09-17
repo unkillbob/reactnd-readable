@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import * as sortBy from 'lodash/sortBy'
-import moment from 'moment'
 import { fetchPosts, updateSortBy } from '../actions'
+import PostSummary from './PostSummary'
 import './PostList.css'
-
-const DATE_FORMAT = 'D MMM YY HH:mm'
-
-function formatTime (timestamp) {
-  return moment(timestamp).format(DATE_FORMAT)
-}
 
 class PostList extends Component {
   componentDidMount () {
@@ -39,23 +34,16 @@ class PostList extends Component {
           </select>
         </div>
         {posts.map(post => (
-          <div className='post' key={post.id}>
+          <Link className='post' key={post.id} to={`/post/${post.id}`}>
             <div className='post-vote-score'>{post.voteScore}</div>
             <div className='post-details'>
               <div className='post-title'>
                 {post.title}
                 <span className='post-category'>{post.category}</span>
               </div>
-              <div className='post-summary'>
-                Submitted by
-                <span className='post-author'> {post.author} </span>
-                at
-                <span className='post-timestamp'>
-                  {' '}{formatTime(post.timestamp)}{' '}
-                </span>
-              </div>
+              <PostSummary post={post} />
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     )

@@ -11,7 +11,12 @@ export function fetchPosts () {
   return fetch(`${BASE_URL}/posts`, OPTIONS).then(res => res.json())
 }
 
+export function fetchPost (id) {
+  return fetch(`${BASE_URL}/posts/${id}`, OPTIONS).then(res => res.json())
+}
+
 export default {
   fetchCategories,
-  fetchPosts
+  fetchPosts,
+  fetchPost
 }
