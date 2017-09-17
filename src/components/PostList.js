@@ -1,15 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as sortBy from 'lodash/sortBy'
-import moment from 'moment'
 import { fetchPosts, updateSortBy } from '../actions'
+import PostSummary from './PostSummary'
 import './PostList.css'
-
-const DATE_FORMAT = 'D MMM YY HH:mm'
-
-function formatTime (timestamp) {
-  return moment(timestamp).format(DATE_FORMAT)
-}
 
 class PostList extends Component {
   componentDidMount () {
@@ -46,14 +40,7 @@ class PostList extends Component {
                 {post.title}
                 <span className='post-category'>{post.category}</span>
               </div>
-              <div className='post-summary'>
-                Submitted by
-                <span className='post-author'> {post.author} </span>
-                at
-                <span className='post-timestamp'>
-                  {' '}{formatTime(post.timestamp)}{' '}
-                </span>
-              </div>
+              <PostSummary post={post} />
             </div>
           </div>
         ))}
