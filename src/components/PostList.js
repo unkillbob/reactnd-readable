@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import * as sortBy from 'lodash/sortBy'
 import { fetchPosts, updateSortBy } from '../actions'
 import PostSummary from './PostSummary'
@@ -33,7 +34,7 @@ class PostList extends Component {
           </select>
         </div>
         {posts.map(post => (
-          <div className='post' key={post.id}>
+          <Link className='post' key={post.id} to={`/post/${post.id}`}>
             <div className='post-vote-score'>{post.voteScore}</div>
             <div className='post-details'>
               <div className='post-title'>
@@ -42,7 +43,7 @@ class PostList extends Component {
               </div>
               <PostSummary post={post} />
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     )
