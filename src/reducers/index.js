@@ -1,4 +1,9 @@
-import { RECEIVE_CATEGORIES, RECEIVE_POSTS, UPDATE_SORT_BY } from '../actions'
+import {
+  RECEIVE_CATEGORIES,
+  RECEIVE_POSTS,
+  RECEIVE_POST,
+  UPDATE_SORT_BY
+} from '../actions'
 
 const INITIAL_STATE = {
   categories: [],
@@ -17,6 +22,11 @@ export default function reducer (state = INITIAL_STATE, action) {
       return {
         ...state,
         posts: action.posts
+      }
+    case RECEIVE_POST:
+      return {
+        ...state,
+        post: action.post
       }
     case UPDATE_SORT_BY:
       return {
