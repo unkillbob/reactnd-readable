@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
-import { Route, withRouter } from 'react-router-dom'
+import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
-import Default from './Default'
-import PostView from './PostView'
+import { Route, withRouter } from 'react-router-dom'
+
 import { fetchCategories } from '../actions'
+import Default from './Default'
+import PostEdit from './PostEdit'
+import PostView from './PostView'
 
 class App extends Component {
   componentDidMount () {
@@ -15,6 +17,7 @@ class App extends Component {
       <div className='app'>
         <h1 className='header'>Readable</h1>
         <Route exact path='/' component={Default} />
+        <Route exact path='/new' component={PostEdit} />
         <Route path='/post/:id' component={PostView} />
       </div>
     )

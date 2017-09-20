@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import './PostList.css'
+
+import * as sortBy from 'lodash/sortBy'
+import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import * as sortBy from 'lodash/sortBy'
+
 import { fetchPosts, updateSortBy } from '../actions'
 import PostSummary from './PostSummary'
-import './PostList.css'
 
 class PostList extends Component {
   componentDidMount () {
@@ -17,12 +19,7 @@ class PostList extends Component {
     return (
       <div className='post-list'>
         <div className='post-list-actions'>
-          <button
-            className='post-create'
-            onClick={() => alert('TODO: create posts')}
-          >
-            New Post
-          </button>
+          <Link to='/new' className='post-create'>New Post</Link>
           Sort by:
           <select
             className='post-select-sort'
