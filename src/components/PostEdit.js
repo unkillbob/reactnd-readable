@@ -1,5 +1,3 @@
-import './PostEdit.css'
-
 import serializeForm from 'form-serialize'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
@@ -85,7 +83,7 @@ class PostEdit extends Component {
             </div>
           </div>
           <button className='btn btn-primary' type='submit'>Post</button>
-          <Link to='/' className='btn btn-link'>Close</Link>
+          <Link to='/' className='btn btn-link'>Cancel</Link>
         </form>
       </div>
     )
