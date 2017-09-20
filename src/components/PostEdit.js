@@ -23,34 +23,69 @@ class PostEdit extends Component {
 
   render () {
     return (
-      <div>
-        <Link to='/' className='close-edit-view'>Close</Link>
+      <div className='container'>
         <form onSubmit={this.handleSubmit}>
-          <div className='create-post-details'>
-            <label className='post-field'>
-              Title:
-              <input type='text' name='title' placeholder='Title' />
+          <div className='form-group row'>
+            <label className='col-sm-2 col-form-label' htmlFor='post-author'>
+              Name
             </label>
-            <label className='post-field'>
-              Body:
-              <textarea name='body' />
+            <div className='col-sm-10'>
+              <input
+                id='post-author'
+                name='author'
+                type='text'
+                className='form-control'
+                placeholder='Name'
+              />
+            </div>
+          </div>
+          <div className='form-group row'>
+            <label className='col-sm-2 col-form-label' htmlFor='post-title'>
+              Title
             </label>
-            <label className='post-field'>
-              Category:
-              <select name='category'>
+            <div className='col-sm-10'>
+              <input
+                id='post-title'
+                name='title'
+                type='text'
+                className='form-control'
+                placeholder='Title'
+              />
+            </div>
+          </div>
+          <div className='form-group row'>
+            <label className='col-sm-2 col-form-label' htmlFor='post-body'>
+              Content
+            </label>
+            <div className='col-sm-10'>
+              <textarea
+                id='post-body'
+                name='body'
+                rows='3'
+                className='form-control'
+              />
+            </div>
+          </div>
+          <div className='form-group row'>
+            <label className='col-sm-2 col-form-label' htmlFor='post-category'>
+              Category
+            </label>
+            <div className='col-sm-10'>
+              <select
+                id='post-category'
+                name='category'
+                className='form-control'
+              >
                 {this.props.categories.map(category => (
                   <option key={category.path} value={category.path}>
                     {category.name}
                   </option>
                 ))}
               </select>
-            </label>
-            <label className='post-field'>
-              Author:
-              <input type='text' name='author' placeholder='Author' />
-            </label>
+            </div>
           </div>
-          <button type='submit'>Post</button>
+          <button className='btn btn-primary' type='submit'>Post</button>
+          <Link to='/' className='btn btn-link'>Close</Link>
         </form>
       </div>
     )
