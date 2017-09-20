@@ -42,3 +42,9 @@ export const updateSortBy = sortBy => ({
   type: UPDATE_SORT_BY,
   sortBy
 })
+
+export const createPost = post => dispatch => {
+  return API.createPost(post).then(createdPost => {
+    dispatch(receivePost(createdPost))
+  })
+}

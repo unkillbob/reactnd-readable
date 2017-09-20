@@ -1,13 +1,20 @@
-import React, { Component } from 'react'
+import './PostView.css'
+
+import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import PostSummary from './PostSummary'
+
 import { fetchPost } from '../actions'
-import './PostView.css'
+import PostSummary from './PostSummary'
 
 class PostView extends Component {
   componentDidMount () {
-    this.props.fetchPost(this.props.match.params.id)
+    const id = this.props.match.params.id
+    const post = this.props.post
+
+    if (!post || post.id !== id) {
+      this.props.fetchPost(id)
+    }
   }
 
   render () {

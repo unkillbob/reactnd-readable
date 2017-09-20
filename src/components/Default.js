@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import PostList from './PostList'
 import './Default.css'
+
+import { Component, default as React } from 'react'
+import { connect } from 'react-redux'
+
+import PostList from './PostList'
 
 class Default extends Component {
   render () {
