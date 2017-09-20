@@ -21,13 +21,13 @@ class PostEdit extends Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='container py-3'>
         <form onSubmit={this.handleSubmit}>
           <div className='form-group row'>
-            <label className='col-sm-2 col-form-label' htmlFor='post-author'>
+            <label className='col-2 col-form-label' htmlFor='post-author'>
               Name
             </label>
-            <div className='col-sm-10'>
+            <div className='col-10'>
               <input
                 id='post-author'
                 name='author'
@@ -38,10 +38,10 @@ class PostEdit extends Component {
             </div>
           </div>
           <div className='form-group row'>
-            <label className='col-sm-2 col-form-label' htmlFor='post-title'>
+            <label className='col-2 col-form-label' htmlFor='post-title'>
               Title
             </label>
-            <div className='col-sm-10'>
+            <div className='col-10'>
               <input
                 id='post-title'
                 name='title'
@@ -52,10 +52,10 @@ class PostEdit extends Component {
             </div>
           </div>
           <div className='form-group row'>
-            <label className='col-sm-2 col-form-label' htmlFor='post-body'>
+            <label className='col-2 col-form-label' htmlFor='post-body'>
               Content
             </label>
-            <div className='col-sm-10'>
+            <div className='col-10'>
               <textarea
                 id='post-body'
                 name='body'
@@ -65,10 +65,10 @@ class PostEdit extends Component {
             </div>
           </div>
           <div className='form-group row'>
-            <label className='col-sm-2 col-form-label' htmlFor='post-category'>
+            <label className='col-2 col-form-label' htmlFor='post-category'>
               Category
             </label>
-            <div className='col-sm-10'>
+            <div className='col-10'>
               <select
                 id='post-category'
                 name='category'
@@ -82,8 +82,12 @@ class PostEdit extends Component {
               </select>
             </div>
           </div>
-          <button className='btn btn-primary' type='submit'>Post</button>
-          <Link to='/' className='btn btn-link'>Cancel</Link>
+          <div className='row'>
+            <div className='col-10 offset-2'>
+              <button className='btn btn-primary' type='submit'>Post</button>
+              <Link to='/' className='btn btn-link'>Cancel</Link>
+            </div>
+          </div>
         </form>
       </div>
     )

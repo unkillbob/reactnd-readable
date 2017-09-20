@@ -1,5 +1,3 @@
-import './Default.css'
-
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -22,7 +20,7 @@ class Default extends Component {
             ))}
           </ul>
         </div>
-        <div className='col-10 py-3'>
+        <div className='col-10'>
           <PostList />
         </div>
       </div>
