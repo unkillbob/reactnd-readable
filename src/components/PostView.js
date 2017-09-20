@@ -1,5 +1,3 @@
-import './PostView.css'
-
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -20,21 +18,21 @@ class PostView extends Component {
   render () {
     const { post } = this.props
     return (
-      <div>
-        <Link to='/'>Back</Link>
+      <div className='container py-3'>
         {post &&
-          <div className='post-view'>
-            <div className='post-header'>
-              <div className='post-vote-score'>{post.voteScore}</div>
-              <div className='post-details'>
-                <div className='post-title'>
-                  {post.title}
-                  <span className='post-category'>{post.category}</span>
-                </div>
-                <PostSummary post={post} />
-              </div>
+          <div className='card'>
+            <h4 className='card-header'>
+              <span className='badge badge-primary'>{post.category}</span>
+              {' '}
+              <span className='align-bottom'>{post.title}</span>
+              <Link to='/' className='close'>×</Link>
+            </h4>
+            <div className='card-block'>
+              <p className='card-text'>{post.body}</p>
             </div>
-            <div className='post-content'>{post.body}</div>
+            <div className='card-footer text-muted'>
+              <PostSummary post={post} />
+            </div>
           </div>}
       </div>
     )
