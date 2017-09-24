@@ -1,6 +1,6 @@
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 class Categories extends Component {
   render () {
@@ -9,15 +9,15 @@ class Categories extends Component {
         <h5>Categories</h5>
         <ul className='nav flex-column'>
           {this.props.categories.map(category => {
-            const isActive = this.props.category === category.path
             return (
               <li className='nav-item' key={category.name}>
-                <Link
-                  to={`/${category.path}`}
-                  className={`nav-link pl-0 ${isActive ? 'active' : ''}`}
+                <NavLink
+                  to={`/c/${category.path}`}
+                  activeClassName='active'
+                  className='nav-link pl-0'
                 >
                   {category.name}
-                </Link>
+                </NavLink>
               </li>
             )
           })}

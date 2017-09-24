@@ -1,7 +1,7 @@
 import serializeForm from 'form-serialize'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import { createPost } from '../actions'
 
@@ -17,6 +17,11 @@ class PostEdit extends Component {
     this.props
       .createPost(post)
       .then(() => this.props.history.push(`/post/${post.id}`))
+  }
+
+  handleCancel = event => {
+    event.preventDefault()
+    this.props.history.goBack()
   }
 
   render () {
@@ -85,7 +90,9 @@ class PostEdit extends Component {
           <div className='row'>
             <div className='col-10 offset-2'>
               <button className='btn btn-primary' type='submit'>Post</button>
-              <Link to='/' className='btn btn-link'>Cancel</Link>
+              <button className='btn btn-link' onClick={this.handleCancel}>
+                Cancel
+              </button>
             </div>
           </div>
         </form>
