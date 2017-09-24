@@ -10,7 +10,13 @@ import PostSummary from './PostSummary'
 
 class PostList extends Component {
   componentDidMount () {
-    this.props.fetchPosts()
+    this.props.fetchPosts(this.props.category)
+  }
+
+  componentWillUpdate ({ category }) {
+    if (category !== this.props.category) {
+      this.props.fetchPosts(category)
+    }
   }
 
   render () {
@@ -58,13 +64,13 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ posts, sortBy }) {
-  return { posts, sortBy }
+function mapStateToProps ({ category, posts, sortBy }) {
+  return { category, posts, sortBy }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchPosts: () => dispatch(fetchPosts()),
+    fetchPosts: category => dispatch(fetchPosts(category)),
     updateSortBy: sortBy => dispatch(updateSortBy(sortBy))
   }
 }

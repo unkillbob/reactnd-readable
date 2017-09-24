@@ -21,8 +21,9 @@ export function fetchCategories () {
     .then(data => data.categories)
 }
 
-export function fetchPosts () {
-  return fetch(POSTS_URL, OPTIONS).then(res => res.json())
+export function fetchPosts (category) {
+  const url = category ? `${BASE_URL}/${category}/posts` : POSTS_URL
+  return fetch(url, OPTIONS).then(res => res.json())
 }
 
 export function fetchPost (id) {

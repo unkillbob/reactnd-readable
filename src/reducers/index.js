@@ -2,6 +2,7 @@ import {
   RECEIVE_CATEGORIES,
   RECEIVE_POSTS,
   RECEIVE_POST,
+  UPDATE_CATEGORY,
   UPDATE_SORT_BY
 } from '../actions'
 
@@ -27,6 +28,11 @@ export default function reducer (state = INITIAL_STATE, action) {
       return {
         ...state,
         post: action.post
+      }
+    case UPDATE_CATEGORY:
+      return {
+        ...state,
+        category: action.category
       }
     case UPDATE_SORT_BY:
       return {
