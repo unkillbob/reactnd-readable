@@ -6,7 +6,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { fetchPosts, updateSortBy } from '../actions'
-import PostSummary from './PostSummary'
+import ItemSummary from './ItemSummary'
+import SortBy from './SortBy'
+import VoteScore from './VoteScore'
 
 class PostList extends Component {
   componentDidMount () {
@@ -27,23 +29,15 @@ class PostList extends Component {
         <nav className='navbar navbar-light bg-faded'>
           <form className='form-inline my-2 my-lg-0'>
             <Link to='/new' className='btn btn-primary mr-3'>New Post</Link>
-            <label htmlFor='posts-sort-by' className='mr-2'>Sort by</label>
-            <select
-              id='posts-sort-by'
-              className='form-control'
-              value={this.props.sortBy}
-              onChange={event => this.props.updateSortBy(event.target.value)}
-            >
-              <option value='voteScore'>Vote Score</option>
-              <option value='timestamp'>Time</option>
-            </select>
+            <SortBy
+              sortBy={this.props.sortBy}
+              onSortByChange={sortBy => this.props.updateSortBy(sortBy)}
+            />
           </form>
         </nav>
         {posts.map(post => (
           <div className='post-item media' key={post.id}>
-            <h4 className='post-vote-score mr-3'>
-              <span className='badge badge-default'>{post.voteScore}</span>
-            </h4>
+            <VoteScore voteScore={post.voteScore} />
             <Link
               className='post-item-details media-body my-2'
               key={post.id}
@@ -55,7 +49,7 @@ class PostList extends Component {
                 </span>
                 <span className='align-bottom'>{post.title}</span>
               </h5>
-              <span className='text-muted'><PostSummary post={post} /></span>
+              <small className='text-muted'><ItemSummary item={post} /></small>
             </Link>
           </div>
         ))}
