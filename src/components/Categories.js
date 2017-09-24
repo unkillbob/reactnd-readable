@@ -6,15 +6,15 @@ class Categories extends Component {
   render () {
     return (
       <div>
-        <h5>Categories</h5>
+        <h5 className='pl-3'>Categories</h5>
         <ul className='nav flex-column'>
           {this.props.categories.map(category => {
             return (
               <li className='nav-item' key={category.name}>
                 <NavLink
                   to={`/c/${category.path}`}
-                  activeClassName='active'
-                  className='nav-link pl-0'
+                  activeClassName='bg-primary text-white'
+                  className='nav-link category-item'
                 >
                   {category.name}
                 </NavLink>

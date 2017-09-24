@@ -23,7 +23,7 @@ class DefaultView extends Component {
 
   render () {
     return (
-      <div className='container-fluid row'>
+      <div className='container-fluid row no-gutters px-0'>
         <div className='col-2 py-3'>
           <Categories />
         </div>
