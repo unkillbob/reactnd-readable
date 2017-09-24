@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import './ItemSummary.css'
 
 const DATE_FORMAT = 'D MMM YY HH:mm'
 
@@ -7,14 +8,14 @@ function formatTime (timestamp) {
   return moment(timestamp).format(DATE_FORMAT)
 }
 
-export default function PostSummary (props) {
+export default function ItemSummary (props) {
   return (
-    <span className='post-summary'>
+    <span>
       Submitted by
-      <span className='post-author'> {props.post.author} </span>
+      <span className='item-author'> {props.item.author} </span>
       at
-      <span className='post-timestamp'>
-        {' '}{formatTime(props.post.timestamp)}
+      <span className='item-timestamp'>
+        {' '}{formatTime(props.item.timestamp)}
       </span>
     </span>
   )

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { fetchPost, fetchComments, updateSortCommentsBy } from '../actions'
-import PostSummary from './PostSummary'
+import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
 import VoteScore from './VoteScore'
 
@@ -41,7 +41,7 @@ class PostView extends Component {
                   <span className='badge badge-primary align-middle mr-2'>
                     {post.category}
                   </span>
-                  <PostSummary post={post} />
+                  <ItemSummary item={post} />
                 </small>
               </div>
               <p className='lead'>{post.body}</p>
@@ -60,7 +60,7 @@ class PostView extends Component {
                     <VoteScore voteScore={comment.voteScore} />
                     <div className='media-body'>
                       <small className='text-muted'>
-                        <PostSummary post={comment} />
+                        <ItemSummary item={comment} />
                       </small>
                       <p>{comment.body}</p>
                     </div>

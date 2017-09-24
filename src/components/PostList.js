@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { fetchPosts, updateSortBy } from '../actions'
-import PostSummary from './PostSummary'
+import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
 import VoteScore from './VoteScore'
 
@@ -49,7 +49,7 @@ class PostList extends Component {
                 </span>
                 <span className='align-bottom'>{post.title}</span>
               </h5>
-              <span className='text-muted'><PostSummary post={post} /></span>
+              <small className='text-muted'><ItemSummary item={post} /></small>
             </Link>
           </div>
         ))}
