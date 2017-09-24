@@ -4,6 +4,7 @@ export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const RECEIVE_POST = 'RECEIVE_POST'
 export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
+export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
@@ -21,8 +22,8 @@ export const receivePosts = posts => ({
   posts
 })
 
-export const fetchPosts = () => dispatch => {
-  return API.fetchPosts().then(posts => {
+export const fetchPosts = category => dispatch => {
+  return API.fetchPosts(category).then(posts => {
     dispatch(receivePosts(posts))
   })
 }
@@ -41,6 +42,11 @@ export const fetchPost = id => dispatch => {
 export const updateSortBy = sortBy => ({
   type: UPDATE_SORT_BY,
   sortBy
+})
+
+export const updateCategory = category => ({
+  type: UPDATE_CATEGORY,
+  category
 })
 
 export const createPost = post => dispatch => {
