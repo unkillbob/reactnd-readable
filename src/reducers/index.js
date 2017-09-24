@@ -1,5 +1,6 @@
 import {
   RECEIVE_CATEGORIES,
+  RECEIVE_COMMENTS,
   RECEIVE_POSTS,
   RECEIVE_POST,
   UPDATE_CATEGORY,
@@ -28,6 +29,11 @@ export default function reducer (state = INITIAL_STATE, action) {
       return {
         ...state,
         post: action.post
+      }
+    case RECEIVE_COMMENTS:
+      return {
+        ...state,
+        comments: action.comments
       }
     case UPDATE_CATEGORY:
       return {

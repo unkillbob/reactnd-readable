@@ -30,6 +30,12 @@ export function fetchPost (id) {
   return fetch(`${POSTS_URL}/${id}`, OPTIONS).then(res => res.json())
 }
 
+export function fetchComments (postId) {
+  return fetch(`${POSTS_URL}/${postId}/comments`, OPTIONS).then(res => {
+    return res.json()
+  })
+}
+
 export function createPost (post) {
   const options = {
     ...POST_OPTIONS,
@@ -42,5 +48,6 @@ export default {
   fetchCategories,
   fetchPosts,
   fetchPost,
+  fetchComments,
   createPost
 }
