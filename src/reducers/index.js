@@ -4,13 +4,16 @@ import {
   RECEIVE_POSTS,
   RECEIVE_POST,
   UPDATE_CATEGORY,
-  UPDATE_SORT_BY
+  UPDATE_SORT_BY,
+  UPDATE_SORT_COMMENTS_BY
 } from '../actions'
 
 const INITIAL_STATE = {
   categories: [],
+  comments: [],
   posts: [],
-  sortBy: 'voteScore'
+  sortBy: 'voteScore',
+  sortCommentsBy: 'voteScore'
 }
 
 export default function reducer (state = INITIAL_STATE, action) {
@@ -44,6 +47,11 @@ export default function reducer (state = INITIAL_STATE, action) {
       return {
         ...state,
         sortBy: action.sortBy
+      }
+    case UPDATE_SORT_COMMENTS_BY:
+      return {
+        ...state,
+        sortCommentsBy: action.sortCommentsBy
       }
     default:
       return state

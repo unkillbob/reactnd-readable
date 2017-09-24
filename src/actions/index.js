@@ -6,6 +6,7 @@ export const RECEIVE_POST = 'RECEIVE_POST'
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
+export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
@@ -54,6 +55,11 @@ export const fetchComments = id => dispatch => {
 export const updateSortBy = sortBy => ({
   type: UPDATE_SORT_BY,
   sortBy
+})
+
+export const updateSortCommentsBy = sortCommentsBy => ({
+  type: UPDATE_SORT_COMMENTS_BY,
+  sortCommentsBy
 })
 
 export const updateCategory = category => ({

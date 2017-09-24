@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 
 import { fetchPosts, updateSortBy } from '../actions'
 import PostSummary from './PostSummary'
+import SortBy from './SortBy'
 
 class PostList extends Component {
   componentDidMount () {
@@ -27,16 +28,10 @@ class PostList extends Component {
         <nav className='navbar navbar-light bg-faded'>
           <form className='form-inline my-2 my-lg-0'>
             <Link to='/new' className='btn btn-primary mr-3'>New Post</Link>
-            <label htmlFor='posts-sort-by' className='mr-2'>Sort by</label>
-            <select
-              id='posts-sort-by'
-              className='form-control'
-              value={this.props.sortBy}
-              onChange={event => this.props.updateSortBy(event.target.value)}
-            >
-              <option value='voteScore'>Vote Score</option>
-              <option value='timestamp'>Time</option>
-            </select>
+            <SortBy
+              sortBy={this.props.sortBy}
+              onSortByChange={sortBy => this.props.updateSortBy(sortBy)}
+            />
           </form>
         </nav>
         {posts.map(post => (

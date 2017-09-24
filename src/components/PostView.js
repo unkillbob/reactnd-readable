@@ -2,8 +2,9 @@ import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { fetchPost, fetchComments } from '../actions'
+import { fetchPost, fetchComments, updateSortCommentsBy } from '../actions'
 import PostSummary from './PostSummary'
+import SortBy from './SortBy'
 
 class PostView extends Component {
   componentDidMount () {
@@ -28,7 +29,7 @@ class PostView extends Component {
       <div className='container py-3'>
         {post &&
           <div>
-            <div className='card mb-3'>
+            <div className='card'>
               <h4 className='card-header'>
                 <span className='badge badge-primary'>{post.category}</span>
                 {' '}
@@ -43,6 +44,16 @@ class PostView extends Component {
               </div>
             </div>
             <div>
+              <nav className='navbar navbar-light bg-faded mt-3'>
+                <form className='form-inline my-2 my-lg-0'>
+                  <h4 className='mr-3'>Comments</h4>
+                  <SortBy
+                    sortBy={this.props.sortCommentsBy}
+                    onSortByChange={sortBy =>
+                      this.props.updateSortCommentsBy(sortBy)}
+                  />
+                </form>
+              </nav>
               {comments &&
                 comments.map(comment => (
                   <div key={comment.id} className='card mb-3'>
@@ -61,14 +72,15 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ post, comments }) {
-  return { post, comments }
+function mapStateToProps ({ post, comments, sortCommentsBy }) {
+  return { post, comments, sortCommentsBy }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
     fetchPost: id => dispatch(fetchPost(id)),
-    fetchComments: postId => dispatch(fetchComments(postId))
+    fetchComments: postId => dispatch(fetchComments(postId)),
+    updateSortCommentsBy: sortBy => dispatch(updateSortCommentsBy(sortBy))
   }
 }
 
