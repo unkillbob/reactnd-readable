@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { fetchPost, fetchComments, updateSortCommentsBy } from '../actions'
 import PostSummary from './PostSummary'
 import SortBy from './SortBy'
+import VoteScore from './VoteScore'
 
 class PostView extends Component {
   componentDidMount () {
@@ -28,25 +29,24 @@ class PostView extends Component {
     return (
       <div className='container py-3'>
         {post &&
-          <div>
-            <div className='card'>
-              <h4 className='card-header'>
-                <span className='badge badge-primary'>{post.category}</span>
-                {' '}
-                <span className='align-bottom'>{post.title}</span>
-                <Link to='/' className='close'>×</Link>
-              </h4>
-              <div className='card-block'>
-                <p className='card-text'>{post.body}</p>
+          <div className='media'>
+            <VoteScore voteScore={post.voteScore} />
+            <div className='media-body'>
+              <div className='mb-3'>
+                <h4 className='mb-0'>
+                  {post.title}
+                  <Link to='/' className='close'>×</Link>
+                </h4>
+                <small className='text-muted'>
+                  <span className='badge badge-primary align-middle mr-2'>
+                    {post.category}
+                  </span>
+                  <PostSummary post={post} />
+                </small>
               </div>
-              <div className='card-footer text-muted'>
-                <PostSummary post={post} />
-              </div>
-            </div>
-            <div>
-              <nav className='navbar navbar-light bg-faded mt-3'>
+              <p className='lead'>{post.body}</p>
+              <nav className='navbar navbar-light bg-faded mt-5'>
                 <form className='form-inline my-2 my-lg-0'>
-                  <h4 className='mr-3'>Comments</h4>
                   <SortBy
                     sortBy={this.props.sortCommentsBy}
                     onSortByChange={sortBy =>
@@ -56,12 +56,13 @@ class PostView extends Component {
               </nav>
               {comments &&
                 comments.map(comment => (
-                  <div key={comment.id} className='card mb-3'>
-                    <div className='card-block'>
-                      <p className='card-text'>{comment.body}</p>
-                    </div>
-                    <div className='card-footer text-muted'>
-                      <PostSummary post={comment} />
+                  <div key={comment.id} className='media mt-3'>
+                    <VoteScore voteScore={comment.voteScore} />
+                    <div className='media-body'>
+                      <small className='text-muted'>
+                        <PostSummary post={comment} />
+                      </small>
+                      <p>{comment.body}</p>
                     </div>
                   </div>
                 ))}

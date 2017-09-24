@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { fetchPosts, updateSortBy } from '../actions'
 import PostSummary from './PostSummary'
 import SortBy from './SortBy'
+import VoteScore from './VoteScore'
 
 class PostList extends Component {
   componentDidMount () {
@@ -36,9 +37,7 @@ class PostList extends Component {
         </nav>
         {posts.map(post => (
           <div className='post-item media' key={post.id}>
-            <h4 className='post-vote-score mr-3'>
-              <span className='badge badge-default'>{post.voteScore}</span>
-            </h4>
+            <VoteScore voteScore={post.voteScore} />
             <Link
               className='post-item-details media-body my-2'
               key={post.id}

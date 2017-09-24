@@ -9,13 +9,13 @@ function formatTime (timestamp) {
 
 export default function PostSummary (props) {
   return (
-    <div className='post-summary'>
+    <span className='post-summary'>
       Submitted by
       <span className='post-author'> {props.post.author} </span>
       at
       <span className='post-timestamp'>
         {' '}{formatTime(props.post.timestamp)}
       </span>
-    </div>
+    </span>
   )
 }
