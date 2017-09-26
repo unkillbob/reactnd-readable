@@ -7,9 +7,11 @@ import * as sortBy from 'lodash/sortBy'
 
 import {
   fetchPost,
+  voteForPost,
   fetchComments,
-  updateSortCommentsBy,
-  createComment
+  createComment,
+  voteForComment,
+  updateSortCommentsBy
 } from '../actions'
 import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
@@ -65,7 +67,10 @@ class PostView extends Component {
       <div className='container py-3'>
         {post &&
           <div className='media'>
-            <VoteScore voteScore={post.voteScore} />
+            <VoteScore
+              voteScore={post.voteScore}
+              onVoteChange={option => this.props.voteForPost(post, option)}
+            />
             <div className='media-body'>
               <div className='mb-3'>
                 <h4 className='mb-0'>
@@ -97,7 +102,11 @@ class PostView extends Component {
               </nav>
               {comments.map(comment => (
                 <div key={comment.id} className='media mt-3'>
-                  <VoteScore voteScore={comment.voteScore} />
+                  <VoteScore
+                    voteScore={comment.voteScore}
+                    onVoteChange={option =>
+                      this.props.voteForComment(comment, option)}
+                  />
                   <div className='media-body'>
                     <small className='text-muted'>
                       <ItemSummary item={comment} />
@@ -168,9 +177,12 @@ function mapStateToProps ({ post, comments, sortCommentsBy }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchPost: id => dispatch(fetchPost(id)),
+    voteForPost: (post, option) => dispatch(voteForPost(post, option)),
     fetchComments: postId => dispatch(fetchComments(postId)),
-    updateSortCommentsBy: sortBy => dispatch(updateSortCommentsBy(sortBy)),
-    createComment: comment => dispatch(createComment(comment))
+    createComment: comment => dispatch(createComment(comment)),
+    voteForComment: (comment, option) =>
+      dispatch(voteForComment(comment, option)),
+    updateSortCommentsBy: sortBy => dispatch(updateSortCommentsBy(sortBy))
   }
 }
 

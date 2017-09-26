@@ -5,7 +5,7 @@ import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { fetchPosts, updateSortBy } from '../actions'
+import { fetchPosts, updateSortBy, voteForPost } from '../actions'
 import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
 import VoteScore from './VoteScore'
@@ -36,10 +36,13 @@ class PostList extends Component {
           </form>
         </nav>
         {posts.map(post => (
-          <div className='post-item media' key={post.id}>
-            <VoteScore voteScore={post.voteScore} />
+          <div className='post-item media my-2' key={post.id}>
+            <VoteScore
+              voteScore={post.voteScore}
+              onVoteChange={option => this.props.voteForPost(post, option)}
+            />
             <Link
-              className='post-item-details media-body my-2'
+              className='post-item-details media-body'
               key={post.id}
               to={`/post/${post.id}`}
             >
@@ -65,7 +68,8 @@ function mapStateToProps ({ category, posts, sortBy }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchPosts: category => dispatch(fetchPosts(category)),
-    updateSortBy: sortBy => dispatch(updateSortBy(sortBy))
+    updateSortBy: sortBy => dispatch(updateSortBy(sortBy)),
+    voteForPost: (post, option) => dispatch(voteForPost(post, option))
   }
 }
 
