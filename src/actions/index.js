@@ -1,15 +1,9 @@
 import API from '../utils/api'
 
-export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const RECEIVE_POST = 'RECEIVE_POST'
-export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
-export const RECEIVE_COMMENT = 'RECEIVE_COMMENT'
-export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
-export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
-export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
-
 // ===== Categories ===== //
+
+export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
+export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
@@ -28,6 +22,11 @@ export const updateCategory = category => ({
 })
 
 // ===== Posts ===== //
+
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+export const RECEIVE_POST = 'RECEIVE_POST'
+export const UPDATE_POST = 'UPDATE_POST'
+export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 
 export const receivePosts = posts => ({
   type: RECEIVE_POSTS,
@@ -57,9 +56,14 @@ export const createPost = post => dispatch => {
   })
 }
 
+export const updatePost = post => ({
+  type: UPDATE_POST,
+  post
+})
+
 export const voteForPost = (post, option) => dispatch => {
   return API.voteForPost(post, option).then(updatedPost => {
-    dispatch(receivePost(updatedPost))
+    dispatch(updatePost(updatedPost))
   })
 }
 
@@ -69,6 +73,10 @@ export const updateSortBy = sortBy => ({
 })
 
 // ===== Comments ===== //
+
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
+export const UPDATE_COMMENT = 'UPDATE_COMMENT'
+export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
 export const receiveComments = comments => ({
   type: RECEIVE_COMMENTS,
@@ -81,20 +89,20 @@ export const fetchComments = id => dispatch => {
   })
 }
 
-export const receiveComment = comment => ({
-  type: RECEIVE_COMMENT,
+export const updateComment = comment => ({
+  type: UPDATE_COMMENT,
   comment
 })
 
 export const createComment = comment => dispatch => {
   return API.createComment(comment).then(createdComment => {
-    dispatch(receiveComment(createdComment))
+    dispatch(updateComment(createdComment))
   })
 }
 
 export const voteForComment = (comment, option) => dispatch => {
   return API.voteForComment(comment, option).then(updatedComment => {
-    dispatch(receiveComment(updatedComment))
+    dispatch(updateComment(updatedComment))
   })
 }
 
