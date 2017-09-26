@@ -4,6 +4,7 @@ export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const RECEIVE_POST = 'RECEIVE_POST'
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
+export const RECEIVE_COMMENT = 'RECEIVE_COMMENT'
 export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
 export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
@@ -70,5 +71,17 @@ export const updateCategory = category => ({
 export const createPost = post => dispatch => {
   return API.createPost(post).then(createdPost => {
     dispatch(receivePost(createdPost))
+  })
+}
+
+export const receiveComment = comment => ({
+  type: RECEIVE_COMMENT,
+  comment
+})
+
+export const createComment = comment => dispatch => {
+  return API.createComment(comment).then(createdComment => {
+    console.log('comment created', comment)
+    dispatch(receiveComment(createdComment))
   })
 }

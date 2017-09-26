@@ -1,5 +1,6 @@
 const BASE_URL = 'http://localhost:3001'
 const POSTS_URL = `${BASE_URL}/posts`
+const COMMENTS_URL = `${BASE_URL}/comments`
 
 const OPTIONS = {
   headers: {
@@ -44,10 +45,19 @@ export function createPost (post) {
   return fetch(POSTS_URL, options).then(res => res.json())
 }
 
+export function createComment (comment) {
+  const options = {
+    ...POST_OPTIONS,
+    body: JSON.stringify(comment)
+  }
+  return fetch(COMMENTS_URL, options).then(res => res.json())
+}
+
 export default {
   fetchCategories,
   fetchPosts,
   fetchPost,
   fetchComments,
-  createPost
+  createPost,
+  createComment
 }
