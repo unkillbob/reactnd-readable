@@ -9,6 +9,8 @@ export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
 export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
+// ===== Categories ===== //
+
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
   categories
@@ -19,6 +21,13 @@ export const fetchCategories = () => dispatch => {
     dispatch(receiveCategories(categories))
   })
 }
+
+export const updateCategory = category => ({
+  type: UPDATE_CATEGORY,
+  category
+})
+
+// ===== Posts ===== //
 
 export const receivePosts = posts => ({
   type: RECEIVE_POSTS,
@@ -42,6 +51,25 @@ export const fetchPost = id => dispatch => {
   })
 }
 
+export const createPost = post => dispatch => {
+  return API.createPost(post).then(createdPost => {
+    dispatch(receivePost(createdPost))
+  })
+}
+
+export const voteForPost = (post, option) => dispatch => {
+  return API.voteForPost(post, option).then(updatedPost => {
+    dispatch(receivePost(updatedPost))
+  })
+}
+
+export const updateSortBy = sortBy => ({
+  type: UPDATE_SORT_BY,
+  sortBy
+})
+
+// ===== Comments ===== //
+
 export const receiveComments = comments => ({
   type: RECEIVE_COMMENTS,
   comments
@@ -53,27 +81,6 @@ export const fetchComments = id => dispatch => {
   })
 }
 
-export const updateSortBy = sortBy => ({
-  type: UPDATE_SORT_BY,
-  sortBy
-})
-
-export const updateSortCommentsBy = sortCommentsBy => ({
-  type: UPDATE_SORT_COMMENTS_BY,
-  sortCommentsBy
-})
-
-export const updateCategory = category => ({
-  type: UPDATE_CATEGORY,
-  category
-})
-
-export const createPost = post => dispatch => {
-  return API.createPost(post).then(createdPost => {
-    dispatch(receivePost(createdPost))
-  })
-}
-
 export const receiveComment = comment => ({
   type: RECEIVE_COMMENT,
   comment
@@ -81,7 +88,17 @@ export const receiveComment = comment => ({
 
 export const createComment = comment => dispatch => {
   return API.createComment(comment).then(createdComment => {
-    console.log('comment created', comment)
     dispatch(receiveComment(createdComment))
   })
 }
+
+export const voteForComment = (comment, option) => dispatch => {
+  return API.voteForComment(comment, option).then(updatedComment => {
+    dispatch(receiveComment(updatedComment))
+  })
+}
+
+export const updateSortCommentsBy = sortCommentsBy => ({
+  type: UPDATE_SORT_COMMENTS_BY,
+  sortCommentsBy
+})
