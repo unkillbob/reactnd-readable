@@ -1,22 +1,66 @@
-import serializeForm from 'form-serialize'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { createPost } from '../actions'
+import { createPost, fetchPost, updatePost } from '../actions'
 
 class PostEdit extends Component {
+  state = {
+    author: '',
+    title: '',
+    body: '',
+    category: ''
+  }
+
+  componentDidMount () {
+    const post = this.props.post
+    if (post) {
+      this.updateStateFromPost(post)
+    } else if (this.props.match.params.id) {
+      this.props.fetchPost(this.props.match.params.id)
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.post) {
+      this.updateStateFromPost(nextProps.post)
+    }
+  }
+
+  updateStateFromPost ({ title, body }) {
+    this.setState({ title, body })
+  }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault()
 
-    const post = serializeForm(event.target, { hash: true })
+    const { author, title, body, category } = this.state
 
-    post.id = post.id || Math.random().toString(36).substr(-8)
-    post.timestamp = post.timestamp || Date.now()
+    let id
+    let postSaved
 
-    this.props
-      .createPost(post)
-      .then(() => this.props.history.push(`/post/${post.id}`))
+    if (this.props.post) {
+      id = this.props.post.id
+      postSaved = this.props.updatePost(id, { title, body })
+    } else {
+      id = Math.random().toString(36).substr(-8)
+      postSaved = this.props.createPost({
+        id,
+        timestamp: Date.now(),
+        author,
+        title,
+        body,
+        category
+      })
+    }
+
+    postSaved.then(() => this.props.history.push(`/post/${id}`))
   }
 
   handleCancel = event => {
@@ -28,20 +72,23 @@ class PostEdit extends Component {
     return (
       <div className='container py-3'>
         <form onSubmit={this.handleSubmit}>
-          <div className='form-group row'>
-            <label className='col-2 col-form-label' htmlFor='post-author'>
-              Name
-            </label>
-            <div className='col-10'>
-              <input
-                id='post-author'
-                name='author'
-                type='text'
-                className='form-control'
-                placeholder='Name'
-              />
-            </div>
-          </div>
+          {!this.props.post &&
+            <div className='form-group row'>
+              <label className='col-2 col-form-label' htmlFor='post-author'>
+                Name
+              </label>
+              <div className='col-10'>
+                <input
+                  id='post-author'
+                  name='author'
+                  value={this.state.author}
+                  onChange={this.handleChange}
+                  type='text'
+                  className='form-control'
+                  placeholder='Name'
+                />
+              </div>
+            </div>}
           <div className='form-group row'>
             <label className='col-2 col-form-label' htmlFor='post-title'>
               Title
@@ -50,6 +97,8 @@ class PostEdit extends Component {
               <input
                 id='post-title'
                 name='title'
+                value={this.state.title}
+                onChange={this.handleChange}
                 type='text'
                 className='form-control'
                 placeholder='Title'
@@ -64,32 +113,37 @@ class PostEdit extends Component {
               <textarea
                 id='post-body'
                 name='body'
+                value={this.state.body}
+                onChange={this.handleChange}
                 rows='3'
                 className='form-control'
               />
             </div>
           </div>
-          <div className='form-group row'>
-            <label className='col-2 col-form-label' htmlFor='post-category'>
-              Category
-            </label>
-            <div className='col-10'>
-              <select
-                id='post-category'
-                name='category'
-                className='form-control'
-              >
-                {this.props.categories.map(category => (
-                  <option key={category.path} value={category.path}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          {!this.props.post &&
+            <div className='form-group row'>
+              <label className='col-2 col-form-label' htmlFor='post-category'>
+                Category
+              </label>
+              <div className='col-10'>
+                <select
+                  id='post-category'
+                  name='category'
+                  value={this.state.category}
+                  onChange={this.handleChange}
+                  className='form-control'
+                >
+                  {this.props.categories.map(category => (
+                    <option key={category.path} value={category.path}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>}
           <div className='row'>
             <div className='col-10 offset-2'>
-              <button className='btn btn-primary' type='submit'>Post</button>
+              <button className='btn btn-primary' type='submit'>Save</button>
               <button className='btn btn-link' onClick={this.handleCancel}>
                 Cancel
               </button>
@@ -101,13 +155,23 @@ class PostEdit extends Component {
   }
 }
 
-function mapStateToProps ({ categories }) {
-  return { categories }
+function mapStateToProps (state, ownProps) {
+  const { categories } = state
+  const id = ownProps.match.params.id
+
+  let post
+  if (state.post && state.post.id === id) {
+    post = state.post
+  }
+
+  return { categories, post }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    createPost: post => dispatch(createPost(post))
+    createPost: post => dispatch(createPost(post)),
+    fetchPost: id => dispatch(fetchPost(id)),
+    updatePost: (id, details) => dispatch(updatePost(id, details))
   }
 }
 

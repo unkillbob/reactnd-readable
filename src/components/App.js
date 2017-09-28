@@ -20,7 +20,8 @@ class App extends Component {
         </nav>
         <Route exact path='/' component={DefaultView} />
         <Route exact path='/new' component={PostEdit} />
-        <Route path='/post/:id' component={PostView} />
+        <Route exact path='/post/:id' component={PostView} />
+        <Route exact path='/post/:id/edit' component={PostEdit} />
         <Route path='/c/:category' component={DefaultView} />
       </div>
     )

@@ -4,10 +4,14 @@ import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
 import serializeForm from 'form-serialize'
 import * as sortBy from 'lodash/sortBy'
+import PencilIcon from 'react-icons/lib/fa/pencil'
+import CommentIcon from 'react-icons/lib/fa/comment-o'
+import TrashIcon from 'react-icons/lib/fa/trash'
 
 import {
   fetchPost,
   voteForPost,
+  deletePost,
   fetchComments,
   createComment,
   voteForComment,
@@ -28,8 +32,14 @@ class PostView extends Component {
 
     if (!post || post.id !== id) {
       this.props.fetchPost(id)
-      this.props.fetchComments(id)
     }
+    this.props.fetchComments(id)
+  }
+
+  deletePost = () => {
+    this.props
+      .deletePost(this.props.post)
+      .then(() => this.props.history.replace('/'))
   }
 
   showCommentModal = () => {
@@ -87,17 +97,31 @@ class PostView extends Component {
               <p className='lead'>{post.body}</p>
               <nav className='navbar navbar-light bg-faded mt-5'>
                 <div className='form-inline my-2 my-lg-0'>
-                  <button
-                    className='btn btn-primary mr-3'
-                    onClick={event => this.showCommentModal()}
-                  >
-                    Add Comment
-                  </button>
+                  <div className='btn-group mr-3'>
+                    <button
+                      className='btn btn-secondary'
+                      onClick={() => this.showCommentModal()}
+                    >
+                      <CommentIcon className='align-text-top mr-2' />
+                      Add Comment
+                    </button>
+                    <Link to={`${post.id}/edit`} className='btn btn-secondary'>
+                      <PencilIcon className='align-text-top mr-2' />
+                      Edit Post
+                    </Link>
+                  </div>
                   <SortBy
                     sortBy={this.props.sortCommentsBy}
                     onSortByChange={sortBy =>
                       this.props.updateSortCommentsBy(sortBy)}
                   />
+                  <button
+                    className='btn btn-danger ml-auto'
+                    onClick={this.deletePost}
+                  >
+                    <TrashIcon className='align-text-top mr-2' />
+                    Delete Post
+                  </button>
                 </div>
               </nav>
               {comments.map(comment => (
@@ -178,6 +202,7 @@ function mapDispatchToProps (dispatch) {
   return {
     fetchPost: id => dispatch(fetchPost(id)),
     voteForPost: (post, option) => dispatch(voteForPost(post, option)),
+    deletePost: post => dispatch(deletePost(post)),
     fetchComments: postId => dispatch(fetchComments(postId)),
     createComment: comment => dispatch(createComment(comment)),
     voteForComment: (comment, option) =>
