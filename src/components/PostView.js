@@ -6,10 +6,12 @@ import serializeForm from 'form-serialize'
 import * as sortBy from 'lodash/sortBy'
 import PencilIcon from 'react-icons/lib/fa/pencil'
 import CommentIcon from 'react-icons/lib/fa/comment-o'
+import TrashIcon from 'react-icons/lib/fa/trash'
 
 import {
   fetchPost,
   voteForPost,
+  deletePost,
   fetchComments,
   createComment,
   voteForComment,
@@ -32,6 +34,12 @@ class PostView extends Component {
       this.props.fetchPost(id)
     }
     this.props.fetchComments(id)
+  }
+
+  deletePost = () => {
+    this.props
+      .deletePost(this.props.post)
+      .then(() => this.props.history.replace('/'))
   }
 
   showCommentModal = () => {
@@ -92,7 +100,7 @@ class PostView extends Component {
                   <div className='btn-group mr-3'>
                     <button
                       className='btn btn-secondary'
-                      onClick={event => this.showCommentModal()}
+                      onClick={() => this.showCommentModal()}
                     >
                       <CommentIcon className='align-text-top mr-2' />
                       Add Comment
@@ -107,6 +115,13 @@ class PostView extends Component {
                     onSortByChange={sortBy =>
                       this.props.updateSortCommentsBy(sortBy)}
                   />
+                  <button
+                    className='btn btn-danger ml-auto'
+                    onClick={this.deletePost}
+                  >
+                    <TrashIcon className='align-text-top mr-2' />
+                    Delete Post
+                  </button>
                 </div>
               </nav>
               {comments.map(comment => (
@@ -187,6 +202,7 @@ function mapDispatchToProps (dispatch) {
   return {
     fetchPost: id => dispatch(fetchPost(id)),
     voteForPost: (post, option) => dispatch(voteForPost(post, option)),
+    deletePost: post => dispatch(deletePost(post)),
     fetchComments: postId => dispatch(fetchComments(postId)),
     createComment: comment => dispatch(createComment(comment)),
     voteForComment: (comment, option) =>

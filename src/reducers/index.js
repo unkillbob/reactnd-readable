@@ -5,6 +5,7 @@ import {
   RECEIVE_POSTS,
   RECEIVE_POST,
   RECEIVE_UPDATED_POST,
+  POST_DELETED,
   UPDATE_CATEGORY,
   UPDATE_SORT_BY,
   UPDATE_SORT_COMMENTS_BY
@@ -28,7 +29,7 @@ export default function reducer (state = INITIAL_STATE, action) {
     case RECEIVE_POSTS:
       return {
         ...state,
-        posts: action.posts
+        posts: action.posts.filter(post => !post.deleted)
       }
     case RECEIVE_POST:
       return {
@@ -46,6 +47,14 @@ export default function reducer (state = INITIAL_STATE, action) {
         ...state,
         posts,
         post
+      }
+    case POST_DELETED:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post.id !== action.post.id),
+        post: state.post && state.post.id === action.post.id
+          ? null
+          : state.post
       }
     case RECEIVE_COMMENTS:
       return {

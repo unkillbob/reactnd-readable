@@ -26,6 +26,7 @@ export const updateCategory = category => ({
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const RECEIVE_POST = 'RECEIVE_POST'
 export const RECEIVE_UPDATED_POST = 'RECEIVE_UPDATED_POST'
+export const POST_DELETED = 'POST_DELETED'
 export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 
 export const receivePosts = posts => ({
@@ -64,6 +65,17 @@ export const receiveUpdatedPost = post => ({
 export const updatePost = (id, details) => dispatch => {
   return API.updatePost(id, details).then(updatedPost => {
     dispatch(receiveUpdatedPost(updatedPost))
+  })
+}
+
+export const postDeleted = post => ({
+  type: POST_DELETED,
+  post
+})
+
+export const deletePost = post => dispatch => {
+  return API.deletePost(post.id).then(() => {
+    dispatch(postDeleted(post))
   })
 }
 

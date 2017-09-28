@@ -23,6 +23,10 @@ const PUT_OPTIONS = {
   },
   method: 'PUT'
 }
+const DELETE_OPTIONS = {
+  ...OPTIONS,
+  method: 'DELETE'
+}
 
 // ===== Categories ===== //
 
@@ -67,6 +71,10 @@ export function voteForPost (post, option) {
   return fetch(`${POSTS_URL}/${post.id}`, options).then(res => res.json())
 }
 
+export function deletePost (id) {
+  return fetch(`${POSTS_URL}/${id}`, DELETE_OPTIONS)
+}
+
 // ===== Comments ===== //
 
 export function fetchComments (postId) {
@@ -98,6 +106,7 @@ export default {
   createPost,
   updatePost,
   voteForPost,
+  deletePost,
   fetchComments,
   createComment,
   voteForComment
