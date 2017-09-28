@@ -4,7 +4,7 @@ import {
   UPDATE_COMMENT,
   RECEIVE_POSTS,
   RECEIVE_POST,
-  UPDATE_POST,
+  RECEIVE_UPDATED_POST,
   UPDATE_CATEGORY,
   UPDATE_SORT_BY,
   UPDATE_SORT_COMMENTS_BY
@@ -35,7 +35,7 @@ export default function reducer (state = INITIAL_STATE, action) {
         ...state,
         post: action.post
       }
-    case UPDATE_POST:
+    case RECEIVE_UPDATED_POST:
       const post = state.post && state.post.id === action.post.id
         ? action.post
         : state.post

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
 import serializeForm from 'form-serialize'
 import * as sortBy from 'lodash/sortBy'
+import PencilIcon from 'react-icons/lib/fa/pencil'
+import CommentIcon from 'react-icons/lib/fa/comment-o'
 
 import {
   fetchPost,
@@ -28,8 +30,8 @@ class PostView extends Component {
 
     if (!post || post.id !== id) {
       this.props.fetchPost(id)
-      this.props.fetchComments(id)
     }
+    this.props.fetchComments(id)
   }
 
   showCommentModal = () => {
@@ -87,12 +89,19 @@ class PostView extends Component {
               <p className='lead'>{post.body}</p>
               <nav className='navbar navbar-light bg-faded mt-5'>
                 <div className='form-inline my-2 my-lg-0'>
-                  <button
-                    className='btn btn-primary mr-3'
-                    onClick={event => this.showCommentModal()}
-                  >
-                    Add Comment
-                  </button>
+                  <div className='btn-group mr-3'>
+                    <button
+                      className='btn btn-secondary'
+                      onClick={event => this.showCommentModal()}
+                    >
+                      <CommentIcon className='align-text-top mr-2' />
+                      Add Comment
+                    </button>
+                    <Link to={`${post.id}/edit`} className='btn btn-secondary'>
+                      <PencilIcon className='align-text-top mr-2' />
+                      Edit Post
+                    </Link>
+                  </div>
                   <SortBy
                     sortBy={this.props.sortCommentsBy}
                     onSortByChange={sortBy =>

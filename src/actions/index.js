@@ -25,7 +25,7 @@ export const updateCategory = category => ({
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const RECEIVE_POST = 'RECEIVE_POST'
-export const UPDATE_POST = 'UPDATE_POST'
+export const RECEIVE_UPDATED_POST = 'RECEIVE_UPDATED_POST'
 export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 
 export const receivePosts = posts => ({
@@ -56,14 +56,20 @@ export const createPost = post => dispatch => {
   })
 }
 
-export const updatePost = post => ({
-  type: UPDATE_POST,
+export const receiveUpdatedPost = post => ({
+  type: RECEIVE_UPDATED_POST,
   post
 })
 
+export const updatePost = (id, details) => dispatch => {
+  return API.updatePost(id, details).then(updatedPost => {
+    dispatch(receiveUpdatedPost(updatedPost))
+  })
+}
+
 export const voteForPost = (post, option) => dispatch => {
   return API.voteForPost(post, option).then(updatedPost => {
-    dispatch(updatePost(updatedPost))
+    dispatch(receiveUpdatedPost(updatedPost))
   })
 }
 

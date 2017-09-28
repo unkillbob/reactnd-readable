@@ -15,6 +15,14 @@ const POST_OPTIONS = {
   },
   method: 'POST'
 }
+const PUT_OPTIONS = {
+  ...OPTIONS,
+  headers: {
+    ...OPTIONS.headers,
+    'Content-Type': 'application/json'
+  },
+  method: 'PUT'
+}
 
 // ===== Categories ===== //
 
@@ -41,6 +49,14 @@ export function createPost (post) {
     body: JSON.stringify(post)
   }
   return fetch(POSTS_URL, options).then(res => res.json())
+}
+
+export function updatePost (id, details) {
+  const options = {
+    ...PUT_OPTIONS,
+    body: JSON.stringify(details)
+  }
+  return fetch(`${POSTS_URL}/${id}`, options).then(res => res.json())
 }
 
 export function voteForPost (post, option) {
@@ -80,6 +96,7 @@ export default {
   fetchPosts,
   fetchPost,
   createPost,
+  updatePost,
   voteForPost,
   fetchComments,
   createComment,
