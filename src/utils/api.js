@@ -91,6 +91,14 @@ export function createComment (comment) {
   return fetch(COMMENTS_URL, options).then(res => res.json())
 }
 
+export function updateComment (id, details) {
+  const options = {
+    ...PUT_OPTIONS,
+    body: JSON.stringify(details)
+  }
+  return fetch(`${COMMENTS_URL}/${id}`, options).then(res => res.json())
+}
+
 export function deleteComment (id) {
   return fetch(`${COMMENTS_URL}/${id}`, DELETE_OPTIONS)
 }
@@ -113,6 +121,7 @@ export default {
   deletePost,
   fetchComments,
   createComment,
+  updateComment,
   voteForComment,
   deleteComment
 }

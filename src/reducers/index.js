@@ -1,7 +1,7 @@
 import {
   RECEIVE_CATEGORIES,
   RECEIVE_COMMENTS,
-  UPDATE_COMMENT,
+  RECEIVE_UPDATED_COMMENT,
   COMMENT_DELETED,
   RECEIVE_POSTS,
   RECEIVE_POST,
@@ -62,12 +62,12 @@ export default function reducer (state = INITIAL_STATE, action) {
         ...state,
         comments: action.comments
       }
-    case UPDATE_COMMENT:
-      const comments = state.comments.filter(c => c.id !== action.comment.id)
-      comments.push(action.comment)
+    case RECEIVE_UPDATED_COMMENT:
       return {
         ...state,
-        comments
+        comments: state.comments
+          .filter(c => c.id !== action.comment.id)
+          .concat(action.comment)
       }
     case COMMENT_DELETED:
       return {

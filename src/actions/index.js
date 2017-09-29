@@ -93,7 +93,7 @@ export const updateSortBy = sortBy => ({
 // ===== Comments ===== //
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
-export const UPDATE_COMMENT = 'UPDATE_COMMENT'
+export const RECEIVE_UPDATED_COMMENT = 'RECEIVE_UPDATED_COMMENT'
 export const COMMENT_DELETED = 'COMMENT_DELETED'
 export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
@@ -108,14 +108,20 @@ export const fetchComments = id => dispatch => {
   })
 }
 
-export const updateComment = comment => ({
-  type: UPDATE_COMMENT,
+export const receiveUpdatedComment = comment => ({
+  type: RECEIVE_UPDATED_COMMENT,
   comment
 })
 
 export const createComment = comment => dispatch => {
   return API.createComment(comment).then(createdComment => {
-    dispatch(updateComment(createdComment))
+    dispatch(receiveUpdatedComment(createdComment))
+  })
+}
+
+export const updateComment = (id, details) => dispatch => {
+  return API.updateComment(id, details).then(updatedComment => {
+    dispatch(receiveUpdatedComment(updatedComment))
   })
 }
 
@@ -132,7 +138,7 @@ export const deleteComment = comment => dispatch => {
 
 export const voteForComment = (comment, option) => dispatch => {
   return API.voteForComment(comment, option).then(updatedComment => {
-    dispatch(updateComment(updatedComment))
+    dispatch(receiveUpdatedComment(updatedComment))
   })
 }
 
