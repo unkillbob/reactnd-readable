@@ -2,7 +2,6 @@ import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
-import serializeForm from 'form-serialize'
 import * as sortBy from 'lodash/sortBy'
 import PencilIcon from 'react-icons/lib/fa/pencil'
 import CommentIcon from 'react-icons/lib/fa/comment-o'
@@ -14,7 +13,9 @@ import {
   deletePost,
   fetchComments,
   createComment,
+  updateComment,
   voteForComment,
+  deleteComment,
   updateSortCommentsBy
 } from '../actions'
 import ItemSummary from './ItemSummary'
@@ -23,7 +24,10 @@ import VoteScore from './VoteScore'
 
 class PostView extends Component {
   state = {
-    commentModalOpen: false
+    commentModalOpen: false,
+    id: null,
+    author: '',
+    body: ''
   }
 
   componentDidMount () {
@@ -42,25 +46,56 @@ class PostView extends Component {
       .then(() => this.props.history.replace('/'))
   }
 
+  editComment = comment => {
+    const { author, body, id } = comment
+    this.setState({
+      commentModalOpen: true,
+      id,
+      author,
+      body
+    })
+    this.showCommentModal()
+  }
+
   showCommentModal = () => {
-    this.setState(() => ({ commentModalOpen: true }))
+    this.setState({ commentModalOpen: true })
   }
 
   closeCommentModal = () => {
-    this.setState(() => ({ commentModalOpen: false }))
+    this.setState({
+      commentModalOpen: false,
+      id: null,
+      author: '',
+      body: ''
+    })
+  }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
   }
 
   handleSaveComment = event => {
     event.preventDefault()
 
-    const comment = serializeForm(event.target, { hash: true })
+    const { author, body, id } = this.state
+    const timestamp = Date.now()
 
-    comment.id = comment.id || Math.random().toString(36).substr(-8)
-    comment.timestamp = comment.timestamp || Date.now()
+    if (id) {
+      this.props.updateComment(id, { body, timestamp })
+    } else {
+      const comment = {
+        author,
+        body,
+        timestamp,
+        id: Math.random().toString(36).substr(-8),
+        parentId: this.props.post.id
+      }
 
-    comment.parentId = this.props.post.id
+      this.props.createComment(comment)
+    }
 
-    this.props.createComment(comment)
     this.closeCommentModal()
   }
 
@@ -134,6 +169,20 @@ class PostView extends Component {
                   <div className='media-body'>
                     <small className='text-muted'>
                       <ItemSummary item={comment} />
+                      <button
+                        className='btn btn-link btn-sm ml-2'
+                        onClick={() => this.editComment(comment)}
+                      >
+                        <PencilIcon className='align-text-top mr-1' />
+                        Edit
+                      </button>
+                      <button
+                        className='btn btn-link btn-sm text-danger'
+                        onClick={() => this.props.deleteComment(comment)}
+                      >
+                        <TrashIcon className='align-text-top mr-1' />
+                        Delete
+                      </button>
                     </small>
                     <p>{comment.body}</p>
                   </div>
@@ -152,7 +201,7 @@ class PostView extends Component {
           <div className='modal-dialog'>
             <form className='modal-content' onSubmit={this.handleSaveComment}>
               <div className='modal-header'>
-                Comment
+                {this.state.id ? 'Edit' : 'Add'} Comment
                 <button
                   className='close'
                   onClick={event => {
@@ -164,19 +213,24 @@ class PostView extends Component {
                 </button>
               </div>
               <div className='modal-body'>
-                <div className='form-group'>
-                  <input
-                    id='comment-author'
-                    name='author'
-                    type='text'
-                    className='form-control'
-                    placeholder='Name'
-                  />
-                </div>
+                {!this.state.id &&
+                  <div className='form-group'>
+                    <input
+                      id='comment-author'
+                      name='author'
+                      value={this.state.author}
+                      onChange={this.handleChange}
+                      type='text'
+                      className='form-control'
+                      placeholder='Name'
+                    />
+                  </div>}
                 <div className='form-group'>
                   <textarea
                     id='comment-body'
                     name='body'
+                    value={this.state.body}
+                    onChange={this.handleChange}
                     rows='3'
                     className='form-control'
                     placeholder='Comment'
@@ -205,8 +259,10 @@ function mapDispatchToProps (dispatch) {
     deletePost: post => dispatch(deletePost(post)),
     fetchComments: postId => dispatch(fetchComments(postId)),
     createComment: comment => dispatch(createComment(comment)),
+    updateComment: (id, details) => dispatch(updateComment(id, details)),
     voteForComment: (comment, option) =>
       dispatch(voteForComment(comment, option)),
+    deleteComment: comment => dispatch(deleteComment(comment)),
     updateSortCommentsBy: sortBy => dispatch(updateSortCommentsBy(sortBy))
   }
 }
