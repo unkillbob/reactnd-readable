@@ -91,6 +91,10 @@ export function createComment (comment) {
   return fetch(COMMENTS_URL, options).then(res => res.json())
 }
 
+export function deleteComment (id) {
+  return fetch(`${COMMENTS_URL}/${id}`, DELETE_OPTIONS)
+}
+
 export function voteForComment (comment, option) {
   const options = {
     ...POST_OPTIONS,
@@ -109,5 +113,6 @@ export default {
   deletePost,
   fetchComments,
   createComment,
-  voteForComment
+  voteForComment,
+  deleteComment
 }

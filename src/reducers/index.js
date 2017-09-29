@@ -2,6 +2,7 @@ import {
   RECEIVE_CATEGORIES,
   RECEIVE_COMMENTS,
   UPDATE_COMMENT,
+  COMMENT_DELETED,
   RECEIVE_POSTS,
   RECEIVE_POST,
   RECEIVE_UPDATED_POST,
@@ -67,6 +68,13 @@ export default function reducer (state = INITIAL_STATE, action) {
       return {
         ...state,
         comments
+      }
+    case COMMENT_DELETED:
+      return {
+        ...state,
+        comments: state.comments.filter(
+          comment => comment.id !== action.comment.id
+        )
       }
     case UPDATE_CATEGORY:
       return {

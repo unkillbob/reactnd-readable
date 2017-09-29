@@ -94,6 +94,7 @@ export const updateSortBy = sortBy => ({
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
+export const COMMENT_DELETED = 'COMMENT_DELETED'
 export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
 export const receiveComments = comments => ({
@@ -115,6 +116,17 @@ export const updateComment = comment => ({
 export const createComment = comment => dispatch => {
   return API.createComment(comment).then(createdComment => {
     dispatch(updateComment(createdComment))
+  })
+}
+
+export const commentDeleted = comment => ({
+  type: COMMENT_DELETED,
+  comment
+})
+
+export const deleteComment = comment => dispatch => {
+  return API.deleteComment(comment.id).then(() => {
+    dispatch(commentDeleted(comment))
   })
 }
 

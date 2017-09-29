@@ -15,6 +15,7 @@ import {
   fetchComments,
   createComment,
   voteForComment,
+  deleteComment,
   updateSortCommentsBy
 } from '../actions'
 import ItemSummary from './ItemSummary'
@@ -134,6 +135,13 @@ class PostView extends Component {
                   <div className='media-body'>
                     <small className='text-muted'>
                       <ItemSummary item={comment} />
+                      <button
+                        className='btn btn-link btn-sm text-danger'
+                        onClick={() => this.props.deleteComment(comment)}
+                      >
+                        <TrashIcon className='align-text-top mr-1' />
+                        Delete
+                      </button>
                     </small>
                     <p>{comment.body}</p>
                   </div>
@@ -207,6 +215,7 @@ function mapDispatchToProps (dispatch) {
     createComment: comment => dispatch(createComment(comment)),
     voteForComment: (comment, option) =>
       dispatch(voteForComment(comment, option)),
+    deleteComment: comment => dispatch(deleteComment(comment)),
     updateSortCommentsBy: sortBy => dispatch(updateSortCommentsBy(sortBy))
   }
 }
