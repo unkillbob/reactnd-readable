@@ -102,8 +102,8 @@ export const receiveComments = comments => ({
   comments
 })
 
-export const fetchComments = id => dispatch => {
-  return API.fetchComments(id).then(comments => {
+export const fetchComments = postId => dispatch => {
+  return API.fetchComments(postId).then(comments => {
     dispatch(receiveComments(comments))
   })
 }
