@@ -5,15 +5,19 @@ import {
   fetchPost,
   createPost,
   updatePost,
+  deletePost,
   fetchComments,
   createComment,
   updateComment,
+  deleteComment,
   RECEIVE_CATEGORIES,
   RECEIVE_POSTS,
   RECEIVE_POST,
   RECEIVE_UPDATED_POST,
+  POST_DELETED,
   RECEIVE_COMMENTS,
-  RECEIVE_UPDATED_COMMENT
+  RECEIVE_UPDATED_COMMENT,
+  COMMENT_DELETED
 } from './'
 
 jest.mock('../utils/api', () => {
@@ -23,9 +27,11 @@ jest.mock('../utils/api', () => {
     fetchPost: jest.fn(() => Promise.resolve()),
     createPost: jest.fn(() => Promise.resolve()),
     updatePost: jest.fn(() => Promise.resolve()),
+    deletePost: jest.fn(() => Promise.resolve()),
     fetchComments: jest.fn(() => Promise.resolve([])),
     createComment: jest.fn(() => Promise.resolve()),
-    updateComment: jest.fn(() => Promise.resolve())
+    updateComment: jest.fn(() => Promise.resolve()),
+    deleteComment: jest.fn(() => Promise.resolve())
   }
 })
 
@@ -183,11 +189,33 @@ describe('updatePost', () => {
 })
 
 describe('deletePost', () => {
-  it('should delete the given post via the API')
+  afterEach(() => {
+    API.deletePost.mockClear()
+  })
 
-  it(
-    'should dispatch the postDeleted action with the given post when the API resolves'
-  )
+  it('should delete the given post via the API', () => {
+    const post = { id: 13 }
+    deletePost(post)(dispatch)
+
+    expect(API.deletePost).toHaveBeenCalledTimes(1)
+    expect(API.deletePost).toHaveBeenCalledWith(post.id)
+  })
+
+  it('should dispatch the POST_DELETED action with the given post when the API resolves', () => {
+    const post = {
+      id: 13,
+      title: 'foo',
+      timestamp: Date.now(),
+      voteScore: 1
+    }
+
+    return deletePost(post)(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: POST_DELETED,
+        post
+      })
+    })
+  })
 })
 
 describe('voteForPost', () => {
@@ -296,11 +324,33 @@ describe('updateComment', () => {
 })
 
 describe('deleteComment', () => {
-  it('should delete the given comment via the API')
+  afterEach(() => {
+    API.deleteComment.mockClear()
+  })
 
-  it(
-    'should dispatch the commentDeleted action with the given comment when the API resolves'
-  )
+  it('should delete the given comment via the API', () => {
+    const comment = { id: 13 }
+    deleteComment(comment)(dispatch)
+
+    expect(API.deleteComment).toHaveBeenCalledTimes(1)
+    expect(API.deleteComment).toHaveBeenCalledWith(comment.id)
+  })
+
+  it('should dispatch the COMMENT_DELETED action with the given comment when the API resolves', () => {
+    const comment = {
+      id: 13,
+      body: 'foo',
+      timestamp: Date.now(),
+      voteScore: 1
+    }
+
+    return deleteComment(comment)(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: COMMENT_DELETED,
+        comment
+      })
+    })
+  })
 })
 
 describe('voteForComment', () => {
