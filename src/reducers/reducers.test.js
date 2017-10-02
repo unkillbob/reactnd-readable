@@ -28,9 +28,26 @@ describe('default state', () => {
   })
 })
 
+const categories = [{ name: 'foo', path: 'foo' }, { name: 'bar', path: 'bar' }]
+const category = 'foo'
+const posts = [{ id: 1 }, { id: 2 }, { id: 4 }]
+const post = [{ id: 2 }]
+const comments = [{ id: 10 }, { id: 12 }, { id: 13 }]
+const sortBy = 'voteScore'
+const sortCommentsBy = 'voteScore'
+
+const state = {
+  categories,
+  category,
+  posts,
+  post,
+  comments,
+  sortBy,
+  sortCommentsBy
+}
+
 describe('RECEIVE_CATEGORIES', () => {
   it('should update the list of categories', () => {
-    const state = { categories: [{ name: 'foo', path: 'foo' }] }
     const categories = [
       { name: 'bar', path: 'bar' },
       { name: 'baz', path: 'baz' }
@@ -39,14 +56,57 @@ describe('RECEIVE_CATEGORIES', () => {
       type: RECEIVE_CATEGORIES,
       categories
     })
-    expect(updatedState).toHaveProperty('categories', categories)
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy
+    })
   })
 })
 
 describe('RECEIVE_POSTS', () => {
-  it('should update the list of posts')
+  it('should update the list of posts', () => {
+    const posts = [{ id: 3 }, { id: 5 }, { id: 7 }]
+    const updatedState = reducer(state, {
+      type: RECEIVE_POSTS,
+      posts
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy
+    })
+  })
 
-  it('should filter out deleted posts')
+  it('should filter out deleted posts', () => {
+    const posts = [
+      { id: 3, deleted: true },
+      { id: 4 },
+      { id: 5 },
+      { id: 7, deleted: true }
+    ]
+    const updatedState = reducer(state, {
+      type: RECEIVE_POSTS,
+      posts
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts: [{ id: 4 }, { id: 5 }],
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy
+    })
+  })
 })
 
 describe('RECEIVE_POST', () => {
