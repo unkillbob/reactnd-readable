@@ -4,11 +4,14 @@ import {
   fetchPosts,
   fetchPost,
   createPost,
+  updatePost,
   fetchComments,
   createComment,
+  updateComment,
   RECEIVE_CATEGORIES,
   RECEIVE_POSTS,
   RECEIVE_POST,
+  RECEIVE_UPDATED_POST,
   RECEIVE_COMMENTS,
   RECEIVE_UPDATED_COMMENT
 } from './'
@@ -19,8 +22,10 @@ jest.mock('../utils/api', () => {
     fetchPosts: jest.fn(() => Promise.resolve([])),
     fetchPost: jest.fn(() => Promise.resolve()),
     createPost: jest.fn(() => Promise.resolve()),
+    updatePost: jest.fn(() => Promise.resolve()),
+    fetchComments: jest.fn(() => Promise.resolve([])),
     createComment: jest.fn(() => Promise.resolve()),
-    fetchComments: jest.fn(() => Promise.resolve([]))
+    updateComment: jest.fn(() => Promise.resolve())
   }
 })
 
@@ -145,11 +150,36 @@ describe('createPost', () => {
 })
 
 describe('updatePost', () => {
-  it('should update the post with the given ID and details via the API')
+  afterEach(() => {
+    API.updatePost.mockClear()
+  })
 
-  it(
-    'should dispatch the receiveUpdatedPost action with the updated post returned by the API'
-  )
+  it('should update the post with the given ID and details via the API', () => {
+    const postId = 13
+    const postDetails = { title: 'foo' }
+    updatePost(postId, postDetails)(dispatch)
+
+    expect(API.updatePost).toHaveBeenCalledTimes(1)
+    expect(API.updatePost).toHaveBeenCalledWith(postId, postDetails)
+  })
+
+  it('should dispatch the RECEIVE_UPDATED_POST action with the updated post returned by the API', () => {
+    const updatedPost = {
+      id: 13,
+      title: 'foo',
+      timestamp: Date.now(),
+      voteScore: 1
+    }
+
+    API.updatePost.mockImplementationOnce(() => Promise.resolve(updatedPost))
+
+    return updatePost(13, { title: 'foo' })(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: RECEIVE_UPDATED_POST,
+        post: updatedPost
+      })
+    })
+  })
 })
 
 describe('deletePost', () => {
@@ -231,11 +261,38 @@ describe('createComment', () => {
 })
 
 describe('updateComment', () => {
-  it('should update the comment with the given ID and details via the API')
+  afterEach(() => {
+    API.updateComment.mockClear()
+  })
 
-  it(
-    'should dispatch the receiveUpdatedComment action with the updated comment returned by the API'
-  )
+  it('should update the comment with the given ID and details via the API', () => {
+    const commentId = 13
+    const commentDetails = { body: 'foo' }
+    updateComment(commentId, commentDetails)(dispatch)
+
+    expect(API.updateComment).toHaveBeenCalledTimes(1)
+    expect(API.updateComment).toHaveBeenCalledWith(commentId, commentDetails)
+  })
+
+  it('should dispatch the receiveUpdatedComment action with the updated comment returned by the API', () => {
+    const updatedComment = {
+      id: 13,
+      body: 'foo',
+      timestamp: Date.now(),
+      voteScore: 1
+    }
+
+    API.updateComment.mockImplementationOnce(() =>
+      Promise.resolve(updatedComment)
+    )
+
+    return updateComment(13, { body: 'foo' })(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: RECEIVE_UPDATED_COMMENT,
+        comment: updatedComment
+      })
+    })
+  })
 })
 
 describe('deleteComment', () => {
