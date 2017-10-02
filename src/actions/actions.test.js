@@ -6,10 +6,12 @@ import {
   createPost,
   updatePost,
   deletePost,
+  voteForPost,
   fetchComments,
   createComment,
   updateComment,
   deleteComment,
+  voteForComment,
   RECEIVE_CATEGORIES,
   RECEIVE_POSTS,
   RECEIVE_POST,
@@ -28,10 +30,12 @@ jest.mock('../utils/api', () => {
     createPost: jest.fn(() => Promise.resolve()),
     updatePost: jest.fn(() => Promise.resolve()),
     deletePost: jest.fn(() => Promise.resolve()),
+    voteForPost: jest.fn(() => Promise.resolve()),
     fetchComments: jest.fn(() => Promise.resolve([])),
     createComment: jest.fn(() => Promise.resolve()),
     updateComment: jest.fn(() => Promise.resolve()),
-    deleteComment: jest.fn(() => Promise.resolve())
+    deleteComment: jest.fn(() => Promise.resolve()),
+    voteForComment: jest.fn(() => Promise.resolve())
   }
 })
 
@@ -219,13 +223,41 @@ describe('deletePost', () => {
 })
 
 describe('voteForPost', () => {
-  it(
-    'should update the voteScore of the given post with the given vote option via the API'
-  )
+  afterEach(() => {
+    API.voteForPost.mockClear()
+  })
 
-  it(
-    'should dispatch the receiveUpdatedPost action with the updated post returned by the API'
-  )
+  it('should update the voteScore of the given post with the given vote option via the API', () => {
+    const post = { id: 13 }
+    const option = 'downVote'
+    voteForPost(post, option)(dispatch)
+
+    expect(API.voteForPost).toHaveBeenCalledTimes(1)
+    expect(API.voteForPost).toHaveBeenCalledWith(post, option)
+  })
+
+  it('should dispatch the RECEIVE_UPDATED_POST action with the updated post returned by the API', () => {
+    const post = {
+      id: 13,
+      title: 'foo',
+      timestamp: Date.now(),
+      voteScore: 1
+    }
+
+    const updatedPost = {
+      ...post,
+      voteScore: 2
+    }
+
+    API.voteForPost.mockImplementationOnce(() => Promise.resolve(updatedPost))
+
+    return voteForPost(post, 'upVote')(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: RECEIVE_UPDATED_POST,
+        post: updatedPost
+      })
+    })
+  })
 })
 
 describe('fetchComments', () => {
@@ -302,7 +334,7 @@ describe('updateComment', () => {
     expect(API.updateComment).toHaveBeenCalledWith(commentId, commentDetails)
   })
 
-  it('should dispatch the receiveUpdatedComment action with the updated comment returned by the API', () => {
+  it('should dispatch the RECEIVE_UPDATED_COMMENT action with the updated comment returned by the API', () => {
     const updatedComment = {
       id: 13,
       body: 'foo',
@@ -354,11 +386,41 @@ describe('deleteComment', () => {
 })
 
 describe('voteForComment', () => {
-  it(
-    'should update the voteScore of the given comment with the given vote option via the API'
-  )
+  afterEach(() => {
+    API.voteForComment.mockClear()
+  })
 
-  it(
-    'should dispatch the receiveUpdatedComment action with the updated comment returned by the API'
-  )
+  it('should update the voteScore of the given comment with the given vote option via the API', () => {
+    const comment = { id: 13 }
+    const option = 'downVote'
+    voteForComment(comment, option)(dispatch)
+
+    expect(API.voteForComment).toHaveBeenCalledTimes(1)
+    expect(API.voteForComment).toHaveBeenCalledWith(comment, option)
+  })
+
+  it('should dispatch the RECEIVE_UPDATED_COMMENT action with the updated comment returned by the API', () => {
+    const comment = {
+      id: 13,
+      body: 'foo',
+      timestamp: Date.now(),
+      voteScore: 2
+    }
+
+    const updatedComment = {
+      ...comment,
+      voteScore: 1
+    }
+
+    API.voteForComment.mockImplementationOnce(() =>
+      Promise.resolve(updatedComment)
+    )
+
+    return voteForComment(comment, 'downVote')(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: RECEIVE_UPDATED_COMMENT,
+        comment: updatedComment
+      })
+    })
+  })
 })
