@@ -226,27 +226,104 @@ describe('POST_DELETED', () => {
 })
 
 describe('RECEIVE_COMMENTS', () => {
-  it('should update the list of comments')
+  it('should update the list of comments', () => {
+    const receivedComments = [{ id: 11 }, { id: 13 }, { id: 14 }]
+    const updatedState = reducer(state, {
+      type: RECEIVE_COMMENTS,
+      comments: receivedComments
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments: receivedComments,
+      sortBy,
+      sortCommentsBy
+    })
+  })
 })
 
 describe('RECEIVE_UPDATED_COMMENT', () => {
-  it(
-    'should update the comment in the comments collection if it is present in the collection'
-  )
+  it('should update the comment in the comments collection if it is present in the collection', () => {
+    const updatedComment = {
+      id: comments[1].id,
+      body: 'Many updates. Wow.'
+    }
+    const updatedState = reducer(state, {
+      type: RECEIVE_UPDATED_COMMENT,
+      comment: updatedComment
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments: [comments[0], comments[2], updatedComment],
+      sortBy,
+      sortCommentsBy
+    })
+  })
 
-  it(
-    'should add the comment to the comments collection if it is not present in the collection'
-  )
+  it('should add the comment to the comments collection if it is not present in the collection', () => {
+    const updatedComment = {
+      id: 17,
+      body: 'Totally new comment.'
+    }
+    const updatedState = reducer(state, {
+      type: RECEIVE_UPDATED_COMMENT,
+      comment: updatedComment
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments: comments.concat(updatedComment),
+      sortBy,
+      sortCommentsBy
+    })
+  })
 })
 
 describe('COMMENT_DELETED', () => {
-  it(
-    'should remove the comment from the comments collection if it is present in the collection'
-  )
+  it('should remove the comment from the comments collection if it is present in the collection', () => {
+    const deletedComment = {
+      id: comments[1].id
+    }
+    const updatedState = reducer(state, {
+      type: COMMENT_DELETED,
+      comment: deletedComment
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments: [comments[0], comments[2]],
+      sortBy,
+      sortCommentsBy
+    })
+  })
 
-  it(
-    'should not change the comments collection if it is not present in the collection'
-  )
+  it('should not change the comments collection if it is not present in the collection', () => {
+    const deletedComment = {
+      id: 17
+    }
+    const updatedState = reducer(state, {
+      type: COMMENT_DELETED,
+      comment: deletedComment
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy
+    })
+  })
 })
 
 describe('UPDATE_CATEGORY', () => {
