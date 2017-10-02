@@ -1,9 +1,41 @@
-describe('fetchCategories', () => {
-  it('should fetch categories from the API')
+import API from '../utils/api'
+import { fetchCategories, RECEIVE_CATEGORIES } from './'
 
-  it(
-    'should dispatch the receiveCategories action with the categories returned by the API'
-  )
+jest.mock('../utils/api', () => {
+  return {
+    fetchCategories: jest.fn(() => Promise.resolve([]))
+  }
+})
+
+const dispatch = jest.fn()
+
+afterEach(() => {
+  dispatch.mockReset()
+})
+
+describe('fetchCategories', () => {
+  afterEach(() => {
+    API.fetchCategories.mockReset()
+  })
+
+  it('should fetch categories from the API', () => {
+    fetchCategories()(dispatch)
+    expect(API.fetchCategories).toHaveBeenCalledTimes(1)
+  })
+
+  it('should dispatch the receiveCategories action with the categories returned by the API', () => {
+    const categories = [{ name: 'foo' }, { name: 'bar' }]
+    API.fetchCategories.mockImplementationOnce(() =>
+      Promise.resolve(categories)
+    )
+
+    return fetchCategories()(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith({
+        type: RECEIVE_CATEGORIES,
+        categories
+      })
+    })
+  })
 })
 
 describe('fetchPosts', () => {
