@@ -1,6 +1,6 @@
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
-import { Link, Route, withRouter } from 'react-router-dom'
+import { Link, Route, Switch, withRouter } from 'react-router-dom'
 
 import { fetchCategories } from '../actions'
 import DefaultView from './DefaultView'
@@ -18,11 +18,13 @@ class App extends Component {
         <nav className='navbar navbar-inverse bg-primary'>
           <Link to='/' className='navbar-brand'>Readable</Link>
         </nav>
-        <Route exact path='/' component={DefaultView} />
-        <Route exact path='/new' component={PostEdit} />
-        <Route exact path='/post/:id' component={PostView} />
-        <Route exact path='/post/:id/edit' component={PostEdit} />
-        <Route path='/c/:category' component={DefaultView} />
+        <Switch>
+          <Route exact path='/' component={DefaultView} />
+          <Route exact path='/new' component={PostEdit} />
+          <Route exact path='/:category' component={DefaultView} />
+          <Route exact path='/:category/:id' component={PostView} />
+          <Route exact path='/:category/:id/edit' component={PostEdit} />
+        </Switch>
       </div>
     )
   }

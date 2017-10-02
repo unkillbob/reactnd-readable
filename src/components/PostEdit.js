@@ -60,7 +60,7 @@ class PostEdit extends Component {
       })
     }
 
-    postSaved.then(() => this.props.history.push(`/post/${id}`))
+    postSaved.then(() => this.props.history.push(`/${category}/${id}`))
   }
 
   handleCancel = event => {

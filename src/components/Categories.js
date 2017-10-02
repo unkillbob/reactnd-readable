@@ -12,7 +12,7 @@ class Categories extends Component {
             return (
               <li className='nav-item' key={category.name}>
                 <NavLink
-                  to={`/c/${category.path}`}
+                  to={`/${category.path}`}
                   activeClassName='bg-primary text-white'
                   className='nav-link category-item'
                 >

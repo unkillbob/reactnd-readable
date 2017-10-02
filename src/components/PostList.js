@@ -44,7 +44,7 @@ class PostList extends Component {
             <Link
               className='post-item-details media-body'
               key={post.id}
-              to={`/post/${post.id}`}
+              to={`/${post.category}/${post.id}`}
             >
               <h5 className='mt-0'>
                 <span className='badge badge-primary mr-3'>
