@@ -250,15 +250,74 @@ describe('COMMENT_DELETED', () => {
 })
 
 describe('UPDATE_CATEGORY', () => {
-  it('should update the active category')
+  it('should update the active category', () => {
+    const updatedCategory = 'bar'
+    const updatedState = reducer(state, {
+      type: UPDATE_CATEGORY,
+      category: updatedCategory
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category: updatedCategory,
+      posts,
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy
+    })
+  })
 
-  it('should allow updating the active category to null')
+  it('should allow updating the active category to null', () => {
+    const updatedState = reducer(state, {
+      type: UPDATE_CATEGORY,
+      category: null
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category: null,
+      posts,
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy
+    })
+  })
 })
 
 describe('UPDATE_SORT_BY', () => {
-  it('should update the sortBy')
+  it('should update the sortBy', () => {
+    const updatedSortBy = 'timestamp'
+    const updatedState = reducer(state, {
+      type: UPDATE_SORT_BY,
+      sortBy: updatedSortBy
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments,
+      sortBy: updatedSortBy,
+      sortCommentsBy
+    })
+  })
 })
 
 describe('UPDATE_SORT_COMMENTS_BY', () => {
-  it('should update the sortCommentsBy')
+  it('should update the sortCommentsBy', () => {
+    const updatedSortCommentsBy = 'timestamp'
+    const updatedState = reducer(state, {
+      type: UPDATE_SORT_COMMENTS_BY,
+      sortCommentsBy: updatedSortCommentsBy
+    })
+    expect(updatedState).toEqual({
+      categories,
+      category,
+      posts,
+      post,
+      comments,
+      sortBy,
+      sortCommentsBy: updatedSortCommentsBy
+    })
+  })
 })
