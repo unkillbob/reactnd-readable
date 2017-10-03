@@ -274,12 +274,14 @@ describe('fetchComments', () => {
   })
 
   it('should dispatch the RECEIVE_COMMENTS action with the comments returned by the API', () => {
+    const postId = 123
     const comments = [{ id: 1 }, { id: 3 }]
     API.fetchComments.mockImplementationOnce(() => Promise.resolve(comments))
 
-    return fetchComments(123)(dispatch).then(() => {
+    return fetchComments(postId)(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
         type: RECEIVE_COMMENTS,
+        postId,
         comments
       })
     })
