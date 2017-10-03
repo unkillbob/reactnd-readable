@@ -40,13 +40,15 @@ class PostEdit extends Component {
   handleSubmit = event => {
     event.preventDefault()
 
-    const { author, title, body, category } = this.state
+    const { author, title, body } = this.state
+    let category = this.state.category
 
     let id
     let postSaved
 
     if (this.props.post) {
       id = this.props.post.id
+      category = this.props.post.category
       postSaved = this.props.updatePost(id, { title, body })
     } else {
       id = Math.random().toString(36).substr(-8)
@@ -155,16 +157,19 @@ class PostEdit extends Component {
   }
 }
 
-function mapStateToProps (state, ownProps) {
-  const { categories } = state
+function mapStateToProps ({ category, post }, ownProps) {
+  const categories = category.list
   const id = ownProps.match.params.id
 
-  let post
-  if (state.post && state.post.id === id) {
-    post = state.post
+  let activePost
+  if (post.active && post.active.id === id) {
+    activePost = post.active
   }
 
-  return { categories, post }
+  return {
+    categories,
+    post: activePost
+  }
 }
 
 function mapDispatchToProps (dispatch) {

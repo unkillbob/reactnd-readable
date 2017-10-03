@@ -27,8 +27,10 @@ class Categories extends Component {
   }
 }
 
-function mapStateToProps ({ categories, category }) {
-  return { categories, category }
+function mapStateToProps ({ category }) {
+  return {
+    categories: category.list
+  }
 }
 
 export default connect(mapStateToProps)(Categories)

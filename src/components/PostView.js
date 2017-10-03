@@ -105,7 +105,7 @@ class PostView extends Component {
       (this.props.comments || []).filter(comment => {
         return post && comment.parentId === post.id
       }),
-      comment => -comment[this.props.sortCommentsBy]
+      comment => -comment[this.props.sortBy]
     )
 
     return (
@@ -147,7 +147,7 @@ class PostView extends Component {
                     </Link>
                   </div>
                   <SortBy
-                    sortBy={this.props.sortCommentsBy}
+                    sortBy={this.props.sortBy}
                     onSortByChange={sortBy =>
                       this.props.updateSortCommentsBy(sortBy)}
                   />
@@ -249,8 +249,13 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ post, comments, sortCommentsBy }) {
-  return { post, comments, sortCommentsBy }
+function mapStateToProps ({ post, comment }) {
+  const { list, sortBy } = comment
+  return {
+    post: post.active,
+    comments: list,
+    sortBy
+  }
 }
 
 function mapDispatchToProps (dispatch) {
