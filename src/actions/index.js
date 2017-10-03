@@ -142,7 +142,7 @@ export const voteForComment = (comment, option) => dispatch => {
   })
 }
 
-export const updateSortCommentsBy = sortCommentsBy => ({
+export const updateSortCommentsBy = sortBy => ({
   type: UPDATE_SORT_COMMENTS_BY,
-  sortCommentsBy
+  sortBy
 })

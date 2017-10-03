@@ -36,7 +36,9 @@ class DefaultView extends Component {
 }
 
 function mapStateToProps ({ category }) {
-  return { category }
+  return {
+    category: category.active
+  }
 }
 
 function mapDispatchToProps (dispatch) {

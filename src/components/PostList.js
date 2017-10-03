@@ -61,8 +61,13 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ category, posts, sortBy }) {
-  return { category, posts, sortBy }
+function mapStateToProps ({ category, post }) {
+  const { list, sortBy } = post
+  return {
+    category: category.active,
+    posts: list,
+    sortBy
+  }
 }
 
 function mapDispatchToProps (dispatch) {
