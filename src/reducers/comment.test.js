@@ -107,7 +107,7 @@ describe('UPDATE_SORT_COMMENTS_BY', () => {
     const updatedSortCommentsBy = 'timestamp'
     const updatedState = reducer(state, {
       type: UPDATE_SORT_COMMENTS_BY,
-      sortCommentsBy: updatedSortCommentsBy
+      sortBy: updatedSortCommentsBy
     })
     expect(updatedState).toEqual({
       list,

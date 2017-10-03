@@ -32,7 +32,7 @@ export default function reducer (state = INITIAL_STATE, action) {
     case UPDATE_SORT_COMMENTS_BY:
       return {
         ...state,
-        sortBy: action.sortCommentsBy
+        sortBy: action.sortBy
       }
     default:
       return state
