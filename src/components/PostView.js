@@ -32,11 +32,7 @@ class PostView extends Component {
 
   componentDidMount () {
     const id = this.props.match.params.id
-    const post = this.props.post
-
-    if (!post || post.id !== id) {
-      this.props.fetchPost(id)
-    }
+    this.props.fetchPost(id)
     this.props.fetchComments(id)
   }
 
@@ -249,11 +245,20 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ post, comment }) {
-  const { list, sortBy } = comment
+function mapStateToProps ({ post, comment }, ownProps) {
+  const id = ownProps.match.params.id
+
+  let activePost
+  if (post.active && post.active.id === id) {
+    activePost = post.active
+  }
+
+  const { byPostId, sortBy } = comment
+  const comments = activePost && byPostId[activePost.id]
+
   return {
-    post: post.active,
-    comments: list,
+    post: activePost,
+    comments,
     sortBy
   }
 }
