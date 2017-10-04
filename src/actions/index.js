@@ -35,7 +35,8 @@ export const receivePosts = posts => ({
 })
 
 export const fetchPosts = category => dispatch => {
-  return API.fetchPosts(category).then(posts => {
+  return API.fetchPosts(category).then((posts = []) => {
+    posts.forEach(post => dispatch(fetchComments(post.id)))
     dispatch(receivePosts(posts))
   })
 }

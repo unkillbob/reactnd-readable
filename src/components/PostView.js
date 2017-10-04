@@ -18,6 +18,7 @@ import {
   deleteComment,
   updateSortCommentsBy
 } from '../actions'
+import CommentCount from './CommentCount'
 import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
 import VoteScore from './VoteScore'
@@ -128,7 +129,7 @@ class PostView extends Component {
               <p className='lead'>{post.body}</p>
               <nav className='navbar navbar-light bg-faded mt-5'>
                 <div className='form-inline my-2 my-lg-0'>
-                  <span className='mr-3'>{comments.length} comments</span>
+                  <CommentCount className='mr-3' comments={comments} />
                   <div className='btn-group mr-3'>
                     <button
                       className='btn btn-secondary'
