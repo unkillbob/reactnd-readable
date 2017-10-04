@@ -6,28 +6,47 @@ import {
 } from '../actions'
 
 const INITIAL_STATE = {
-  list: [],
+  byPostId: {},
   sortBy: 'voteScore'
 }
 
 export default function reducer (state = INITIAL_STATE, action) {
+  let relatedComments
+
   switch (action.type) {
     case RECEIVE_COMMENTS:
       return {
         ...state,
-        list: action.comments
+        byPostId: {
+          ...state.byPostId,
+          [action.postId]: action.comments
+        }
       }
     case RECEIVE_UPDATED_COMMENT:
+      const updatedComment = action.comment
+      relatedComments = state.byPostId[updatedComment.parentId] || []
+
       return {
         ...state,
-        list: state.list
-          .filter(c => c.id !== action.comment.id)
-          .concat(action.comment)
+        byPostId: {
+          ...state.byPostId,
+          [updatedComment.parentId]: relatedComments
+            .filter(comment => comment.id !== updatedComment.id)
+            .concat(updatedComment)
+        }
       }
     case COMMENT_DELETED:
+      const deletedComment = action.comment
+      relatedComments = state.byPostId[deletedComment.parentId] || []
+
       return {
         ...state,
-        list: state.list.filter(comment => comment.id !== action.comment.id)
+        byPostId: {
+          ...state.byPostId,
+          [deletedComment.parentId]: relatedComments.filter(comment => {
+            return comment.id !== deletedComment.id
+          })
+        }
       }
     case UPDATE_SORT_COMMENTS_BY:
       return {

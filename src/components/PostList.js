@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { fetchPosts, updateSortBy, voteForPost } from '../actions'
+import CommentCount from './CommentCount'
 import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
 import VoteScore from './VoteScore'
@@ -52,7 +53,13 @@ class PostList extends Component {
                 </span>
                 <span className='align-bottom'>{post.title}</span>
               </h5>
-              <small className='text-muted'><ItemSummary item={post} /></small>
+              <small className='text-muted'>
+                <CommentCount
+                  className='mr-3'
+                  comments={this.props.comments[post.id]}
+                />
+                <ItemSummary item={post} />
+              </small>
             </Link>
           </div>
         ))}
@@ -61,11 +68,12 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ category, post }) {
+function mapStateToProps ({ category, post, comment }) {
   const { list, sortBy } = post
   return {
     category: category.active,
     posts: list,
+    comments: comment.byPostId,
     sortBy
   }
 }

@@ -18,6 +18,7 @@ import {
   deleteComment,
   updateSortCommentsBy
 } from '../actions'
+import CommentCount from './CommentCount'
 import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
 import VoteScore from './VoteScore'
@@ -32,11 +33,7 @@ class PostView extends Component {
 
   componentDidMount () {
     const id = this.props.match.params.id
-    const post = this.props.post
-
-    if (!post || post.id !== id) {
-      this.props.fetchPost(id)
-    }
+    this.props.fetchPost(id)
     this.props.fetchComments(id)
   }
 
@@ -132,7 +129,7 @@ class PostView extends Component {
               <p className='lead'>{post.body}</p>
               <nav className='navbar navbar-light bg-faded mt-5'>
                 <div className='form-inline my-2 my-lg-0'>
-                  <span className='mr-3'>{comments.length} comments</span>
+                  <CommentCount className='mr-3' comments={comments} />
                   <div className='btn-group mr-3'>
                     <button
                       className='btn btn-secondary'
@@ -249,11 +246,20 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ post, comment }) {
-  const { list, sortBy } = comment
+function mapStateToProps ({ post, comment }, ownProps) {
+  const id = ownProps.match.params.id
+
+  let activePost
+  if (post.active && post.active.id === id) {
+    activePost = post.active
+  }
+
+  const { byPostId, sortBy } = comment
+  const comments = activePost && byPostId[activePost.id]
+
   return {
-    post: post.active,
-    comments: list,
+    post: activePost,
+    comments,
     sortBy
   }
 }

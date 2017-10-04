@@ -35,7 +35,8 @@ export const receivePosts = posts => ({
 })
 
 export const fetchPosts = category => dispatch => {
-  return API.fetchPosts(category).then(posts => {
+  return API.fetchPosts(category).then((posts = []) => {
+    posts.forEach(post => dispatch(fetchComments(post.id)))
     dispatch(receivePosts(posts))
   })
 }
@@ -97,14 +98,15 @@ export const RECEIVE_UPDATED_COMMENT = 'RECEIVE_UPDATED_COMMENT'
 export const COMMENT_DELETED = 'COMMENT_DELETED'
 export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
-export const receiveComments = comments => ({
+export const receiveComments = (postId, comments) => ({
   type: RECEIVE_COMMENTS,
+  postId,
   comments
 })
 
 export const fetchComments = postId => dispatch => {
   return API.fetchComments(postId).then(comments => {
-    dispatch(receiveComments(comments))
+    dispatch(receiveComments(postId, comments))
   })
 }
 

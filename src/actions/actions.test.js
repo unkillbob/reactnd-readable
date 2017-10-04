@@ -73,6 +73,7 @@ describe('fetchCategories', () => {
 describe('fetchPosts', () => {
   afterEach(() => {
     API.fetchPosts.mockClear()
+    API.fetchComments.mockClear()
   })
 
   it('should fetch posts from the API', () => {
@@ -97,6 +98,23 @@ describe('fetchPosts', () => {
         type: RECEIVE_POSTS,
         posts
       })
+    })
+  })
+
+  it('should dispatch the fetchComments action for each post returned by the API', () => {
+    const posts = [{ id: 1 }, { id: 3 }]
+    API.fetchPosts.mockImplementationOnce(() => Promise.resolve(posts))
+
+    const stubDispatch = jest.fn(action => {
+      if (typeof action === 'function') {
+        action(dispatch)
+      }
+    })
+
+    return fetchPosts()(stubDispatch).then(() => {
+      expect(API.fetchComments).toHaveBeenCalledTimes(2)
+      expect(API.fetchComments).toHaveBeenCalledWith(1)
+      expect(API.fetchComments).toHaveBeenCalledWith(3)
     })
   })
 })
@@ -274,12 +292,14 @@ describe('fetchComments', () => {
   })
 
   it('should dispatch the RECEIVE_COMMENTS action with the comments returned by the API', () => {
+    const postId = 123
     const comments = [{ id: 1 }, { id: 3 }]
     API.fetchComments.mockImplementationOnce(() => Promise.resolve(comments))
 
-    return fetchComments(123)(dispatch).then(() => {
+    return fetchComments(postId)(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
         type: RECEIVE_COMMENTS,
+        postId,
         comments
       })
     })
