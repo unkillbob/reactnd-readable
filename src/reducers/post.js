@@ -1,3 +1,6 @@
+import * as keyBy from 'lodash/keyBy'
+import * as omitBy from 'lodash/omitBy'
+
 import {
   RECEIVE_POSTS,
   RECEIVE_POST,
@@ -7,7 +10,7 @@ import {
 } from '../actions'
 
 const INITIAL_STATE = {
-  list: [],
+  byId: {},
   sortBy: 'voteScore'
 }
 
@@ -16,32 +19,24 @@ export default function reducer (state = INITIAL_STATE, action) {
     case RECEIVE_POSTS:
       return {
         ...state,
-        list: action.posts.filter(post => !post.deleted)
+        byId: {
+          ...state.byId,
+          ...keyBy(action.posts.filter(post => !post.deleted), 'id')
+        }
       }
     case RECEIVE_POST:
-      return {
-        ...state,
-        active: action.post
-      }
     case RECEIVE_UPDATED_POST:
-      const active = state.active && state.active.id === action.post.id
-        ? action.post
-        : state.active
-      const list = state.list.map(post => {
-        return post.id === action.post.id ? action.post : post
-      })
       return {
         ...state,
-        list,
-        active
+        byId: {
+          ...state.byId,
+          [action.post.id]: action.post
+        }
       }
     case POST_DELETED:
       return {
         ...state,
-        list: state.list.filter(post => post.id !== action.post.id),
-        active: state.active && state.active.id === action.post.id
-          ? null
-          : state.active
+        byId: omitBy(state.byId, { id: action.post.id })
       }
     case UPDATE_SORT_BY:
       return {

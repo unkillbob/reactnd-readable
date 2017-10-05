@@ -1,6 +1,8 @@
 import './PostList.css'
 
+import * as filter from 'lodash/filter'
 import * as sortBy from 'lodash/sortBy'
+import * as values from 'lodash/values'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -23,8 +25,6 @@ class PostList extends Component {
   }
 
   render () {
-    const posts = sortBy(this.props.posts, post => -post[this.props.sortBy])
-
     return (
       <div className='post-list'>
         <nav className='navbar navbar-light bg-faded'>
@@ -36,7 +36,7 @@ class PostList extends Component {
             />
           </form>
         </nav>
-        {posts.map(post => (
+        {this.props.posts.map(post => (
           <div className='post-item media my-2' key={post.id}>
             <VoteScore
               voteScore={post.voteScore}
@@ -69,12 +69,14 @@ class PostList extends Component {
 }
 
 function mapStateToProps ({ category, post, comment }) {
-  const { list, sortBy } = post
+  const posts = category.active
+    ? filter(post.byId, { category: category.active })
+    : values(post.byId)
   return {
     category: category.active,
-    posts: list,
+    posts: sortBy(posts, p => -p[post.sortBy]),
     comments: comment.byPostId,
-    sortBy
+    sortBy: post.sortBy
   }
 }
 

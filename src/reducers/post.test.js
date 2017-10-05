@@ -8,9 +8,9 @@ import {
 import reducer from './post'
 
 describe('default state', () => {
-  it('should default the list of posts to an empty array', () => {
+  it('should default the collection of posts to an empty object', () => {
     const state = reducer(undefined, { type: '' })
-    expect(state).toHaveProperty('list', [])
+    expect(state).toHaveProperty('byId', {})
   })
 
   it('should default sortBy to "voteScore"', () => {

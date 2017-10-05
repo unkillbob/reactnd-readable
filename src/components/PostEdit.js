@@ -16,19 +16,30 @@ class PostEdit extends Component {
     const post = this.props.post
     if (post) {
       this.updateStateFromPost(post)
-    } else if (this.props.match.params.id) {
-      this.props.fetchPost(this.props.match.params.id)
+    } else {
+      this.setInitialCategory(this.props.categories)
+      if (this.props.match.params.id) {
+        this.props.fetchPost(this.props.match.params.id)
+      }
     }
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.post) {
       this.updateStateFromPost(nextProps.post)
+    } else {
+      this.setInitialCategory(nextProps.categories)
     }
   }
 
   updateStateFromPost ({ title, body }) {
     this.setState({ title, body })
+  }
+
+  setInitialCategory (categories) {
+    if (categories.length && !this.state.category) {
+      this.setState({ category: categories[0].path })
+    }
   }
 
   handleChange = event => {
@@ -159,16 +170,9 @@ class PostEdit extends Component {
 
 function mapStateToProps ({ category, post }, ownProps) {
   const categories = category.list
-  const id = ownProps.match.params.id
-
-  let activePost
-  if (post.active && post.active.id === id) {
-    activePost = post.active
-  }
-
   return {
     categories,
-    post: activePost
+    post: post.byId[ownProps.match.params.id]
   }
 }
 

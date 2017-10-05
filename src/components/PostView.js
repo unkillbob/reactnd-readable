@@ -247,13 +247,7 @@ class PostView extends Component {
 }
 
 function mapStateToProps ({ post, comment }, ownProps) {
-  const id = ownProps.match.params.id
-
-  let activePost
-  if (post.active && post.active.id === id) {
-    activePost = post.active
-  }
-
+  const activePost = post.byId[ownProps.match.params.id]
   const { byPostId, sortBy } = comment
   const comments = activePost && byPostId[activePost.id]
 
