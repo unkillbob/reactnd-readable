@@ -5,15 +5,26 @@
 ## Table of Contents
 
 - [Installation](#installation)
+- [Setup API Server](#setup-api-server)
 - [Available Scripts](#available-scripts)
   - [yarn start](#yarn-start)
   - [yarn test](#yarn-test)
   - [yarn run build](#yarn-run-build)
-- [Setup API Server](#setup-api-server)
 
 ## Installation
 
 To install dependencies ready to run the application simply run `yarn`.
+
+## Setup API Server
+
+This application requires a node.js API server to communicate with. To setup and start the server run the following:
+
+1. `git clone git@github.com:udacity/reactnd-project-readable-starter.git`
+1. `cd reactnd-project-readable-starter/api-server`
+1. `npm install`
+1. `node server`
+
+See https://github.com/udacity/reactnd-project-readable-starter for more details.
 
 ## Available Scripts
 
@@ -39,14 +50,3 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
-
-## Setup API Server
-
-This application requires a node.js API server to communicate with. To setup and start the server run the following:
-
-1. `git clone git@github.com:udacity/reactnd-project-readable-starter.git`
-1. `cd reactnd-project-readable-starter/api-server`
-1. `npm install`
-1. `node server`
-
-See https://github.com/udacity/reactnd-project-readable-starter for more details.
