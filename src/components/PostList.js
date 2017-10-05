@@ -1,8 +1,9 @@
 import './PostList.css'
 
-import * as filter from 'lodash/filter'
-import * as sortBy from 'lodash/sortBy'
-import * as values from 'lodash/values'
+import countBy from 'lodash/countBy'
+import filter from 'lodash/filter'
+import sortBy from 'lodash/sortBy'
+import values from 'lodash/values'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -56,7 +57,7 @@ class PostList extends Component {
               <small className='text-muted'>
                 <CommentCount
                   className='mr-3'
-                  comments={this.props.comments[post.id]}
+                  count={this.props.commentCount[post.id]}
                 />
                 <ItemSummary item={post} />
               </small>
@@ -72,10 +73,11 @@ function mapStateToProps ({ category, posts, comment }) {
   const filteredPosts = category.active
     ? filter(posts.byId, { category: category.active })
     : values(posts.byId)
+
   return {
     category: category.active,
     posts: sortBy(filteredPosts, post => -post[posts.sortBy]),
-    comments: comment.byPostId,
+    commentCount: countBy(comment.byId, 'parentId'),
     sortBy: posts.sortBy
   }
 }

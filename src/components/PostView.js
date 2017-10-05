@@ -2,7 +2,8 @@ import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
-import * as sortBy from 'lodash/sortBy'
+import filter from 'lodash/filter'
+import sortBy from 'lodash/sortBy'
 import PencilIcon from 'react-icons/lib/fa/pencil'
 import CommentIcon from 'react-icons/lib/fa/comment-o'
 import TrashIcon from 'react-icons/lib/fa/trash'
@@ -97,13 +98,7 @@ class PostView extends Component {
   }
 
   render () {
-    const { post } = this.props
-    const comments = sortBy(
-      (this.props.comments || []).filter(comment => {
-        return post && comment.parentId === post.id
-      }),
-      comment => -comment[this.props.sortBy]
-    )
+    const { post, comments } = this.props
 
     return (
       <div className='container py-3'>
@@ -129,7 +124,10 @@ class PostView extends Component {
               <p className='lead'>{post.body}</p>
               <nav className='navbar navbar-light bg-faded mt-5'>
                 <div className='form-inline my-2 my-lg-0'>
-                  <CommentCount className='mr-3' comments={comments} />
+                  <CommentCount
+                    className='mr-3'
+                    count={(comments || []).length}
+                  />
                   <div className='btn-group mr-3'>
                     <button
                       className='btn btn-secondary'
@@ -248,13 +246,14 @@ class PostView extends Component {
 
 function mapStateToProps ({ posts, comment }, ownProps) {
   const activePost = posts.byId[ownProps.match.params.id]
-  const { byPostId, sortBy } = comment
-  const comments = activePost && byPostId[activePost.id]
+  const filteredComments = filter(comment.byId, {
+    parentId: activePost && activePost.id
+  })
 
   return {
     post: activePost,
-    comments,
-    sortBy
+    comments: sortBy(filteredComments, c => -c[comment.sortBy]),
+    sortBy: comment.sortBy
   }
 }
 

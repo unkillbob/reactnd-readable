@@ -1,3 +1,6 @@
+import keyBy from 'lodash/keyBy'
+import omitBy from 'lodash/omitBy'
+
 import {
   RECEIVE_COMMENTS,
   RECEIVE_UPDATED_COMMENT,
@@ -6,47 +9,32 @@ import {
 } from '../actions'
 
 const INITIAL_STATE = {
-  byPostId: {},
+  byId: {},
   sortBy: 'voteScore'
 }
 
 export default function reducer (state = INITIAL_STATE, action) {
-  let relatedComments
-
   switch (action.type) {
     case RECEIVE_COMMENTS:
       return {
         ...state,
-        byPostId: {
-          ...state.byPostId,
-          [action.postId]: action.comments
+        byId: {
+          ...state.byId,
+          ...keyBy(action.comments, 'id')
         }
       }
     case RECEIVE_UPDATED_COMMENT:
-      const updatedComment = action.comment
-      relatedComments = state.byPostId[updatedComment.parentId] || []
-
       return {
         ...state,
-        byPostId: {
-          ...state.byPostId,
-          [updatedComment.parentId]: relatedComments
-            .filter(comment => comment.id !== updatedComment.id)
-            .concat(updatedComment)
+        byId: {
+          ...state.byId,
+          [action.comment.id]: action.comment
         }
       }
     case COMMENT_DELETED:
-      const deletedComment = action.comment
-      relatedComments = state.byPostId[deletedComment.parentId] || []
-
       return {
         ...state,
-        byPostId: {
-          ...state.byPostId,
-          [deletedComment.parentId]: relatedComments.filter(comment => {
-            return comment.id !== deletedComment.id
-          })
-        }
+        byId: omitBy(state.byId, { id: action.comment.id })
       }
     case UPDATE_SORT_COMMENTS_BY:
       return {
