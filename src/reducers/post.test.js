@@ -20,30 +20,37 @@ describe('default state', () => {
 })
 
 const list = [{ id: 1 }, { id: 2 }, { id: 4 }]
-const active = { id: 2 }
+const byId = {
+  1: list[0],
+  2: list[1],
+  4: list[2]
+}
 const sortBy = 'voteScore'
 
 const state = {
-  list,
-  active,
+  byId,
   sortBy
 }
 
 describe('RECEIVE_POSTS', () => {
-  it('should update the list of posts', () => {
+  it('should update the collection of posts with the received posts', () => {
     const receivedPosts = [{ id: 3 }, { id: 5 }, { id: 7 }]
     const updatedState = reducer(state, {
       type: RECEIVE_POSTS,
       posts: receivedPosts
     })
     expect(updatedState).toEqual({
-      list: receivedPosts,
-      active,
+      byId: {
+        ...byId,
+        3: receivedPosts[0],
+        5: receivedPosts[1],
+        7: receivedPosts[2]
+      },
       sortBy
     })
   })
 
-  it('should filter out deleted posts', () => {
+  it('should filter out deleted posts from the received posts', () => {
     const receivedPosts = [
       { id: 3, deleted: true },
       { id: 4 },
@@ -55,32 +62,37 @@ describe('RECEIVE_POSTS', () => {
       posts: receivedPosts
     })
     expect(updatedState).toEqual({
-      list: [{ id: 4 }, { id: 5 }],
-      active,
+      byId: {
+        ...byId,
+        4: receivedPosts[1],
+        5: receivedPosts[2]
+      },
       sortBy
     })
   })
 })
 
 describe('RECEIVE_POST', () => {
-  it('should update the active post', () => {
+  it('should add the received post to the collection of posts', () => {
     const receivedPost = { id: 5 }
     const updatedState = reducer(state, {
       type: RECEIVE_POST,
       post: receivedPost
     })
     expect(updatedState).toEqual({
-      list,
-      active: receivedPost,
+      byId: {
+        ...byId,
+        5: receivedPost
+      },
       sortBy
     })
   })
 })
 
 describe('RECEIVE_UPDATED_POST', () => {
-  it('should update the active post and posts collection if it matches by ID', () => {
+  it('should update the received post in the collection of posts', () => {
     const updatedPost = {
-      id: active.id,
+      id: 2,
       title: 'Such updated',
       body: 'Many updates. Wow.'
     }
@@ -89,53 +101,27 @@ describe('RECEIVE_UPDATED_POST', () => {
       post: updatedPost
     })
     expect(updatedState).toEqual({
-      list: [list[0], updatedPost, list[2]],
-      active: updatedPost,
-      sortBy
-    })
-  })
-
-  it('should not update the active post or posts collection if it does not match by ID', () => {
-    const updatedPost = {
-      id: 7,
-      title: 'Such updated',
-      body: 'Many updates. Wow.'
-    }
-    const updatedState = reducer(state, {
-      type: RECEIVE_UPDATED_POST,
-      post: updatedPost
-    })
-    expect(updatedState).toEqual({
-      list,
-      active,
+      byId: {
+        ...byId,
+        2: updatedPost
+      },
       sortBy
     })
   })
 })
 
 describe('POST_DELETED', () => {
-  it('should set the active post to null and remove the post from the posts collection if it matches by ID', () => {
-    const deletedPost = { id: active.id }
+  it('should remove the post from the posts collection', () => {
+    const deletedPost = { id: 2 }
     const updatedState = reducer(state, {
       type: POST_DELETED,
       post: deletedPost
     })
-    expect(updatedState).toEqual({
-      list: [list[0], list[2]],
-      active: null,
-      sortBy
-    })
-  })
+    const expectedById = { ...byId }
+    delete expectedById[deletedPost.id]
 
-  it('should not update the active post if it does not match by ID', () => {
-    const deletedPost = { id: list[2].id }
-    const updatedState = reducer(state, {
-      type: POST_DELETED,
-      post: deletedPost
-    })
     expect(updatedState).toEqual({
-      list: [list[0], list[1]],
-      active,
+      byId: expectedById,
       sortBy
     })
   })
@@ -147,8 +133,7 @@ describe('POST_DELETED', () => {
       post: deletedPost
     })
     expect(updatedState).toEqual({
-      list,
-      active,
+      byId,
       sortBy
     })
   })
@@ -162,8 +147,7 @@ describe('UPDATE_SORT_BY', () => {
       sortBy: updatedSortBy
     })
     expect(updatedState).toEqual({
-      list,
-      active,
+      byId,
       sortBy: updatedSortBy
     })
   })

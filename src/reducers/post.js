@@ -1,5 +1,5 @@
-import * as keyBy from 'lodash/keyBy'
-import * as omitBy from 'lodash/omitBy'
+import keyBy from 'lodash/keyBy'
+import omitBy from 'lodash/omitBy'
 
 import {
   RECEIVE_POSTS,
