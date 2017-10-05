@@ -168,11 +168,11 @@ class PostEdit extends Component {
   }
 }
 
-function mapStateToProps ({ category, post }, ownProps) {
+function mapStateToProps ({ category, posts }, ownProps) {
   const categories = category.list
   return {
     categories,
-    post: post.byId[ownProps.match.params.id]
+    post: posts.byId[ownProps.match.params.id]
   }
 }
 

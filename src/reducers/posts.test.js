@@ -5,7 +5,7 @@ import {
   POST_DELETED,
   UPDATE_SORT_BY
 } from '../actions'
-import reducer from './post'
+import reducer from './posts'
 
 describe('default state', () => {
   it('should default the collection of posts to an empty object', () => {
