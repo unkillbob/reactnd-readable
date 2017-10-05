@@ -1,7 +1,8 @@
 import {
   RECEIVE_POSTS,
   RECEIVE_POST,
-  RECEIVE_UPDATED_POST,
+  POST_CREATED,
+  POST_UPDATED,
   POST_DELETED,
   UPDATE_SORT_BY
 } from '../actions'
@@ -89,7 +90,24 @@ describe('RECEIVE_POST', () => {
   })
 })
 
-describe('RECEIVE_UPDATED_POST', () => {
+describe('POST_CREATED', () => {
+  it('should add the created post to the collection of posts', () => {
+    const createdPost = { id: 5 }
+    const updatedState = reducer(state, {
+      type: POST_CREATED,
+      post: createdPost
+    })
+    expect(updatedState).toEqual({
+      byId: {
+        ...byId,
+        5: createdPost
+      },
+      sortBy
+    })
+  })
+})
+
+describe('POST_UPDATED', () => {
   it('should update the received post in the collection of posts', () => {
     const updatedPost = {
       id: 2,
@@ -97,7 +115,7 @@ describe('RECEIVE_UPDATED_POST', () => {
       body: 'Many updates. Wow.'
     }
     const updatedState = reducer(state, {
-      type: RECEIVE_UPDATED_POST,
+      type: POST_UPDATED,
       post: updatedPost
     })
     expect(updatedState).toEqual({

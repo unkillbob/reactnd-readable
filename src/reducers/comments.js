@@ -3,7 +3,8 @@ import omitBy from 'lodash/omitBy'
 
 import {
   RECEIVE_COMMENTS,
-  RECEIVE_UPDATED_COMMENT,
+  COMMENT_CREATED,
+  COMMENT_UPDATED,
   COMMENT_DELETED,
   UPDATE_SORT_COMMENTS_BY
 } from '../actions'
@@ -23,7 +24,8 @@ export default function reducer (state = INITIAL_STATE, action) {
           ...keyBy(action.comments, 'id')
         }
       }
-    case RECEIVE_UPDATED_COMMENT:
+    case COMMENT_CREATED:
+    case COMMENT_UPDATED:
       return {
         ...state,
         byId: {

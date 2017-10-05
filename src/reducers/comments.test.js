@@ -1,6 +1,7 @@
 import {
   RECEIVE_COMMENTS,
-  RECEIVE_UPDATED_COMMENT,
+  COMMENT_CREATED,
+  COMMENT_UPDATED,
   COMMENT_DELETED,
   UPDATE_SORT_COMMENTS_BY
 } from '../actions'
@@ -50,32 +51,34 @@ describe('RECEIVE_COMMENTS', () => {
   })
 })
 
-describe('RECEIVE_UPDATED_COMMENT', () => {
-  it('should update the comment in the collection of comments if it was already present', () => {
+describe('COMMENT_CREATED', () => {
+  it('should add the comment to the collections of comments', () => {
+    const createdComment = {
+      id: 17,
+      body: 'Totally new comment.'
+    }
+    const updatedState = reducer(state, {
+      type: COMMENT_CREATED,
+      comment: createdComment
+    })
+    expect(updatedState).toEqual({
+      byId: {
+        ...byId,
+        [createdComment.id]: createdComment
+      },
+      sortBy
+    })
+  })
+})
+
+describe('COMMENT_UPDATED', () => {
+  it('should update the comment in the collection of comments', () => {
     const updatedComment = {
       id: comments[1].id,
       body: 'Many updates. Wow.'
     }
     const updatedState = reducer(state, {
-      type: RECEIVE_UPDATED_COMMENT,
-      comment: updatedComment
-    })
-    expect(updatedState).toEqual({
-      byId: {
-        ...byId,
-        [updatedComment.id]: updatedComment
-      },
-      sortBy
-    })
-  })
-
-  it('should add the comment to the collections of comments if it was not present', () => {
-    const updatedComment = {
-      id: 17,
-      body: 'Totally new comment.'
-    }
-    const updatedState = reducer(state, {
-      type: RECEIVE_UPDATED_COMMENT,
+      type: COMMENT_UPDATED,
       comment: updatedComment
     })
     expect(updatedState).toEqual({

@@ -4,7 +4,8 @@ import omitBy from 'lodash/omitBy'
 import {
   RECEIVE_POSTS,
   RECEIVE_POST,
-  RECEIVE_UPDATED_POST,
+  POST_CREATED,
+  POST_UPDATED,
   POST_DELETED,
   UPDATE_SORT_BY
 } from '../actions'
@@ -25,7 +26,8 @@ export default function reducer (state = INITIAL_STATE, action) {
         }
       }
     case RECEIVE_POST:
-    case RECEIVE_UPDATED_POST:
+    case POST_CREATED:
+    case POST_UPDATED:
       return {
         ...state,
         byId: {
