@@ -244,16 +244,16 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ posts, comment }, ownProps) {
+function mapStateToProps ({ posts, comments }, ownProps) {
   const activePost = posts.byId[ownProps.match.params.id]
-  const filteredComments = filter(comment.byId, {
+  const filteredComments = filter(comments.byId, {
     parentId: activePost && activePost.id
   })
 
   return {
     post: activePost,
-    comments: sortBy(filteredComments, c => -c[comment.sortBy]),
-    sortBy: comment.sortBy
+    comments: sortBy(filteredComments, comment => -comment[comments.sortBy]),
+    sortBy: comments.sortBy
   }
 }
 

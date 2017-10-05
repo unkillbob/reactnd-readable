@@ -69,7 +69,7 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ category, posts, comment }) {
+function mapStateToProps ({ category, posts, comments }) {
   const filteredPosts = category.active
     ? filter(posts.byId, { category: category.active })
     : values(posts.byId)
@@ -77,7 +77,7 @@ function mapStateToProps ({ category, posts, comment }) {
   return {
     category: category.active,
     posts: sortBy(filteredPosts, post => -post[posts.sortBy]),
-    commentCount: countBy(comment.byId, 'parentId'),
+    commentCount: countBy(comments.byId, 'parentId'),
     sortBy: posts.sortBy
   }
 }

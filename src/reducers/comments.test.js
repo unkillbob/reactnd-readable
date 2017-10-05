@@ -4,7 +4,7 @@ import {
   COMMENT_DELETED,
   UPDATE_SORT_COMMENTS_BY
 } from '../actions'
-import reducer from './comment'
+import reducer from './comments'
 
 describe('default state', () => {
   it('should default the collection of comments to an empty object', () => {
