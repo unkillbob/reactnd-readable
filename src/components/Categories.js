@@ -14,6 +14,7 @@ class Categories extends Component {
                 <NavLink
                   to={`/${category.path}`}
                   activeClassName='bg-primary text-white'
+                  isActive={() => category.path === this.props.active}
                   className='nav-link category-item'
                 >
                   {category.name}
@@ -29,7 +30,8 @@ class Categories extends Component {
 
 function mapStateToProps ({ category }) {
   return {
-    categories: category.list
+    categories: category.list,
+    active: category.active
   }
 }
 

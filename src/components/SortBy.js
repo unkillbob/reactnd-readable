@@ -2,17 +2,21 @@ import React from 'react'
 
 export default function SortBy (props) {
   return (
-    <label htmlFor='posts-sort-by' className='mr-2'>
-      Sort by
-      <select
-        id='posts-sort-by'
-        className='form-control ml-2'
-        value={props.sortBy}
-        onChange={event => props.onSortByChange(event.target.value)}
-      >
-        <option value='voteScore'>Vote Score</option>
-        <option value='timestamp'>Time</option>
-      </select>
-    </label>
+    <div className='d-inline-flex'>
+      <div className='input-group'>
+        <label className='input-group-addon mb-0' htmlFor='posts-sort-by'>
+          Sort by
+        </label>
+        <select
+          id='posts-sort-by'
+          className='form-control custom-select flex-row'
+          value={props.sortBy}
+          onChange={event => props.onSortByChange(event.target.value)}
+        >
+          <option value='voteScore'>Vote Score</option>
+          <option value='timestamp'>Time</option>
+        </select>
+      </div>
+    </div>
   )
 }
