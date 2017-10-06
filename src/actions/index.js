@@ -25,7 +25,8 @@ export const updateCategory = category => ({
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const RECEIVE_POST = 'RECEIVE_POST'
-export const RECEIVE_UPDATED_POST = 'RECEIVE_UPDATED_POST'
+export const POST_CREATED = 'POST_CREATED'
+export const POST_UPDATED = 'POST_UPDATED'
 export const POST_DELETED = 'POST_DELETED'
 export const UPDATE_SORT_BY = 'UPDATE_SORT_BY'
 
@@ -48,24 +49,30 @@ export const receivePost = post => ({
 
 export const fetchPost = id => dispatch => {
   return API.fetchPost(id).then(post => {
+    dispatch(fetchComments(post.id))
     dispatch(receivePost(post))
   })
 }
 
+export const postCreated = post => ({
+  type: POST_CREATED,
+  post
+})
+
 export const createPost = post => dispatch => {
   return API.createPost(post).then(createdPost => {
-    dispatch(receivePost(createdPost))
+    dispatch(postCreated(createdPost))
   })
 }
 
-export const receiveUpdatedPost = post => ({
-  type: RECEIVE_UPDATED_POST,
+export const postUpdated = post => ({
+  type: POST_UPDATED,
   post
 })
 
 export const updatePost = (id, details) => dispatch => {
   return API.updatePost(id, details).then(updatedPost => {
-    dispatch(receiveUpdatedPost(updatedPost))
+    dispatch(postUpdated(updatedPost))
   })
 }
 
@@ -82,7 +89,7 @@ export const deletePost = post => dispatch => {
 
 export const voteForPost = (post, option) => dispatch => {
   return API.voteForPost(post, option).then(updatedPost => {
-    dispatch(receiveUpdatedPost(updatedPost))
+    dispatch(postUpdated(updatedPost))
   })
 }
 
@@ -94,7 +101,8 @@ export const updateSortBy = sortBy => ({
 // ===== Comments ===== //
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
-export const RECEIVE_UPDATED_COMMENT = 'RECEIVE_UPDATED_COMMENT'
+export const COMMENT_CREATED = 'COMMENT_CREATED'
+export const COMMENT_UPDATED = 'COMMENT_UPDATED'
 export const COMMENT_DELETED = 'COMMENT_DELETED'
 export const UPDATE_SORT_COMMENTS_BY = 'UPDATE_SORT_COMMENTS_BY'
 
@@ -110,20 +118,25 @@ export const fetchComments = postId => dispatch => {
   })
 }
 
-export const receiveUpdatedComment = comment => ({
-  type: RECEIVE_UPDATED_COMMENT,
+export const commentCreated = comment => ({
+  type: COMMENT_CREATED,
   comment
 })
 
 export const createComment = comment => dispatch => {
   return API.createComment(comment).then(createdComment => {
-    dispatch(receiveUpdatedComment(createdComment))
+    dispatch(commentCreated(createdComment))
   })
 }
 
+export const commentUpdated = comment => ({
+  type: COMMENT_UPDATED,
+  comment
+})
+
 export const updateComment = (id, details) => dispatch => {
   return API.updateComment(id, details).then(updatedComment => {
-    dispatch(receiveUpdatedComment(updatedComment))
+    dispatch(commentUpdated(updatedComment))
   })
 }
 
@@ -140,7 +153,7 @@ export const deleteComment = comment => dispatch => {
 
 export const voteForComment = (comment, option) => dispatch => {
   return API.voteForComment(comment, option).then(updatedComment => {
-    dispatch(receiveUpdatedComment(updatedComment))
+    dispatch(commentUpdated(updatedComment))
   })
 }
 

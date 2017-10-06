@@ -2,7 +2,8 @@ import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
-import * as sortBy from 'lodash/sortBy'
+import filter from 'lodash/filter'
+import sortBy from 'lodash/sortBy'
 import PencilIcon from 'react-icons/lib/fa/pencil'
 import CommentIcon from 'react-icons/lib/fa/comment-o'
 import TrashIcon from 'react-icons/lib/fa/trash'
@@ -11,7 +12,6 @@ import {
   fetchPost,
   voteForPost,
   deletePost,
-  fetchComments,
   createComment,
   updateComment,
   voteForComment,
@@ -32,9 +32,9 @@ class PostView extends Component {
   }
 
   componentDidMount () {
-    const id = this.props.match.params.id
-    this.props.fetchPost(id)
-    this.props.fetchComments(id)
+    if (!this.props.post) {
+      this.props.fetchPost(this.props.match.params.id)
+    }
   }
 
   deletePost = () => {
@@ -97,13 +97,7 @@ class PostView extends Component {
   }
 
   render () {
-    const { post } = this.props
-    const comments = sortBy(
-      (this.props.comments || []).filter(comment => {
-        return post && comment.parentId === post.id
-      }),
-      comment => -comment[this.props.sortBy]
-    )
+    const { post, comments } = this.props
 
     return (
       <div className='container py-3'>
@@ -129,7 +123,10 @@ class PostView extends Component {
               <p className='lead'>{post.body}</p>
               <nav className='navbar navbar-light bg-faded mt-5'>
                 <div className='form-inline my-2 my-lg-0'>
-                  <CommentCount className='mr-3' comments={comments} />
+                  <CommentCount
+                    className='mr-3'
+                    count={(comments || []).length}
+                  />
                   <div className='btn-group mr-3'>
                     <button
                       className='btn btn-secondary'
@@ -246,21 +243,16 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ post, comment }, ownProps) {
-  const id = ownProps.match.params.id
-
-  let activePost
-  if (post.active && post.active.id === id) {
-    activePost = post.active
-  }
-
-  const { byPostId, sortBy } = comment
-  const comments = activePost && byPostId[activePost.id]
+function mapStateToProps ({ posts, comments }, ownProps) {
+  const activePost = posts.byId[ownProps.match.params.id]
+  const filteredComments = filter(comments.byId, {
+    parentId: activePost && activePost.id
+  })
 
   return {
     post: activePost,
-    comments,
-    sortBy
+    comments: sortBy(filteredComments, comment => -comment[comments.sortBy]),
+    sortBy: comments.sortBy
   }
 }
 
@@ -269,7 +261,6 @@ function mapDispatchToProps (dispatch) {
     fetchPost: id => dispatch(fetchPost(id)),
     voteForPost: (post, option) => dispatch(voteForPost(post, option)),
     deletePost: post => dispatch(deletePost(post)),
-    fetchComments: postId => dispatch(fetchComments(postId)),
     createComment: comment => dispatch(createComment(comment)),
     updateComment: (id, details) => dispatch(updateComment(id, details)),
     voteForComment: (comment, option) =>

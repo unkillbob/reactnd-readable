@@ -1,6 +1,9 @@
 import './PostList.css'
 
-import * as sortBy from 'lodash/sortBy'
+import countBy from 'lodash/countBy'
+import filter from 'lodash/filter'
+import sortBy from 'lodash/sortBy'
+import values from 'lodash/values'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -23,8 +26,6 @@ class PostList extends Component {
   }
 
   render () {
-    const posts = sortBy(this.props.posts, post => -post[this.props.sortBy])
-
     return (
       <div className='post-list'>
         <nav className='navbar navbar-light bg-faded'>
@@ -36,7 +37,7 @@ class PostList extends Component {
             />
           </form>
         </nav>
-        {posts.map(post => (
+        {this.props.posts.map(post => (
           <div className='post-item media my-2' key={post.id}>
             <VoteScore
               voteScore={post.voteScore}
@@ -56,7 +57,7 @@ class PostList extends Component {
               <small className='text-muted'>
                 <CommentCount
                   className='mr-3'
-                  comments={this.props.comments[post.id]}
+                  count={this.props.commentCount[post.id]}
                 />
                 <ItemSummary item={post} />
               </small>
@@ -68,13 +69,16 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ category, post, comment }) {
-  const { list, sortBy } = post
+function mapStateToProps ({ category, posts, comments }) {
+  const filteredPosts = category.active
+    ? filter(posts.byId, { category: category.active })
+    : values(posts.byId)
+
   return {
     category: category.active,
-    posts: list,
-    comments: comment.byPostId,
-    sortBy
+    posts: sortBy(filteredPosts, post => -post[posts.sortBy]),
+    commentCount: countBy(comments.byId, 'parentId'),
+    sortBy: posts.sortBy
   }
 }
 

@@ -15,10 +15,12 @@ import {
   RECEIVE_CATEGORIES,
   RECEIVE_POSTS,
   RECEIVE_POST,
-  RECEIVE_UPDATED_POST,
+  POST_CREATED,
+  POST_UPDATED,
   POST_DELETED,
   RECEIVE_COMMENTS,
-  RECEIVE_UPDATED_COMMENT,
+  COMMENT_CREATED,
+  COMMENT_UPDATED,
   COMMENT_DELETED
 } from './'
 
@@ -120,8 +122,15 @@ describe('fetchPosts', () => {
 })
 
 describe('fetchPost', () => {
+  const post = { id: 13 }
+
+  beforeEach(() => {
+    API.fetchPost.mockImplementationOnce(() => Promise.resolve(post))
+  })
+
   afterEach(() => {
     API.fetchPost.mockClear()
+    API.fetchComments.mockClear()
   })
 
   it('should fetch the post with the given ID from the API', () => {
@@ -133,14 +142,24 @@ describe('fetchPost', () => {
   })
 
   it('should dispatch the RECEIVE_POST action with the post returned by the API', () => {
-    const post = { id: 13 }
-    API.fetchPost.mockImplementationOnce(() => Promise.resolve(post))
-
     return fetchPost(post.i)(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
         type: RECEIVE_POST,
         post
       })
+    })
+  })
+
+  it('should dispatch the fetchComments action for the post returned by the API', () => {
+    const stubDispatch = jest.fn(action => {
+      if (typeof action === 'function') {
+        action(dispatch)
+      }
+    })
+
+    return fetchPost(post.i)(stubDispatch).then(() => {
+      expect(API.fetchComments).toHaveBeenCalledTimes(1)
+      expect(API.fetchComments).toHaveBeenCalledWith(post.id)
     })
   })
 })
@@ -158,7 +177,7 @@ describe('createPost', () => {
     expect(API.createPost).toHaveBeenCalledWith(postDetails)
   })
 
-  it('should dispatch the RECEIVE_POST action with the created post returned by the API', () => {
+  it('should dispatch the POST_CREATED action with the created post returned by the API', () => {
     const createdPost = {
       id: 13,
       title: 'foo',
@@ -170,7 +189,7 @@ describe('createPost', () => {
 
     return createPost({ id: 13, title: 'foo' })(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
-        type: RECEIVE_POST,
+        type: POST_CREATED,
         post: createdPost
       })
     })
@@ -191,7 +210,7 @@ describe('updatePost', () => {
     expect(API.updatePost).toHaveBeenCalledWith(postId, postDetails)
   })
 
-  it('should dispatch the RECEIVE_UPDATED_POST action with the updated post returned by the API', () => {
+  it('should dispatch the POST_UPDATED action with the updated post returned by the API', () => {
     const updatedPost = {
       id: 13,
       title: 'foo',
@@ -203,7 +222,7 @@ describe('updatePost', () => {
 
     return updatePost(13, { title: 'foo' })(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
-        type: RECEIVE_UPDATED_POST,
+        type: POST_UPDATED,
         post: updatedPost
       })
     })
@@ -254,7 +273,7 @@ describe('voteForPost', () => {
     expect(API.voteForPost).toHaveBeenCalledWith(post, option)
   })
 
-  it('should dispatch the RECEIVE_UPDATED_POST action with the updated post returned by the API', () => {
+  it('should dispatch the POST_UPDATED action with the updated post returned by the API', () => {
     const post = {
       id: 13,
       title: 'foo',
@@ -271,7 +290,7 @@ describe('voteForPost', () => {
 
     return voteForPost(post, 'upVote')(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
-        type: RECEIVE_UPDATED_POST,
+        type: POST_UPDATED,
         post: updatedPost
       })
     })
@@ -319,7 +338,7 @@ describe('createComment', () => {
     expect(API.createComment).toHaveBeenCalledWith(commentDetails)
   })
 
-  it('should dispatch the RECEIVE_UPDATED_COMMENT action with the created comment returned by the API', () => {
+  it('should dispatch the COMMENT_CREATED action with the created comment returned by the API', () => {
     const createdComment = {
       id: 13,
       body: 'foo',
@@ -333,7 +352,7 @@ describe('createComment', () => {
 
     return createComment({ id: 13, body: 'foo' })(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
-        type: RECEIVE_UPDATED_COMMENT,
+        type: COMMENT_CREATED,
         comment: createdComment
       })
     })
@@ -354,7 +373,7 @@ describe('updateComment', () => {
     expect(API.updateComment).toHaveBeenCalledWith(commentId, commentDetails)
   })
 
-  it('should dispatch the RECEIVE_UPDATED_COMMENT action with the updated comment returned by the API', () => {
+  it('should dispatch the COMMENT_UPDATED action with the updated comment returned by the API', () => {
     const updatedComment = {
       id: 13,
       body: 'foo',
@@ -368,7 +387,7 @@ describe('updateComment', () => {
 
     return updateComment(13, { body: 'foo' })(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
-        type: RECEIVE_UPDATED_COMMENT,
+        type: COMMENT_UPDATED,
         comment: updatedComment
       })
     })
@@ -419,7 +438,7 @@ describe('voteForComment', () => {
     expect(API.voteForComment).toHaveBeenCalledWith(comment, option)
   })
 
-  it('should dispatch the RECEIVE_UPDATED_COMMENT action with the updated comment returned by the API', () => {
+  it('should dispatch the COMMENT_UPDATED action with the updated comment returned by the API', () => {
     const comment = {
       id: 13,
       body: 'foo',
@@ -438,7 +457,7 @@ describe('voteForComment', () => {
 
     return voteForComment(comment, 'downVote')(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
-        type: RECEIVE_UPDATED_COMMENT,
+        type: COMMENT_UPDATED,
         comment: updatedComment
       })
     })
