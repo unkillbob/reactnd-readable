@@ -1,4 +1,7 @@
-.post-item-details {
+.post-title,
+.post-summary {
   color: inherit;
+}
+.post-title:hover {
   text-decoration: none;
 }

@@ -7,8 +7,10 @@ import values from 'lodash/values'
 import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import PencilIcon from 'react-icons/lib/fa/pencil'
+import TrashIcon from 'react-icons/lib/fa/trash'
 
-import { fetchPosts, updateSortBy, voteForPost } from '../actions'
+import { fetchPosts, deletePost, updateSortBy, voteForPost } from '../actions'
 import CommentCount from './CommentCount'
 import ItemSummary from './ItemSummary'
 import SortBy from './SortBy'
@@ -43,25 +45,48 @@ class PostList extends Component {
               voteScore={post.voteScore}
               onVoteChange={option => this.props.voteForPost(post, option)}
             />
-            <Link
-              className='post-item-details media-body'
-              key={post.id}
-              to={`/${post.category}/${post.id}`}
-            >
+            <div className='media-body' key={post.id}>
               <h5 className='mt-0'>
-                <span className='badge badge-primary mr-3'>
+                <Link
+                  className='badge badge-primary mr-3'
+                  to={`/${post.category}`}
+                >
                   {post.category}
-                </span>
-                <span className='align-bottom'>{post.title}</span>
+                </Link>
+                <Link
+                  className='post-title align-bottom'
+                  to={`/${post.category}/${post.id}`}
+                >
+                  {post.title}
+                </Link>
               </h5>
               <small className='text-muted'>
-                <CommentCount
-                  className='mr-3'
-                  count={this.props.commentCount[post.id]}
-                />
-                <ItemSummary item={post} />
+                <Link
+                  className='post-summary'
+                  to={`/${post.category}/${post.id}`}
+                >
+                  <CommentCount
+                    className='mr-3'
+                    count={this.props.commentCount[post.id]}
+                  />
+                  <ItemSummary item={post} />
+                </Link>
+                <Link
+                  className='btn btn-link btn-sm ml-2'
+                  to={`/${post.category}/${post.id}/edit`}
+                >
+                  <PencilIcon className='align-text-top mr-1' />
+                  Edit
+                </Link>
+                <button
+                  className='btn btn-link btn-sm text-danger'
+                  onClick={() => this.props.deletePost(post)}
+                >
+                  <TrashIcon className='align-text-top mr-1' />
+                  Delete
+                </button>
               </small>
-            </Link>
+            </div>
           </div>
         ))}
       </div>
@@ -85,6 +110,7 @@ function mapStateToProps ({ category, posts, comments }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchPosts: category => dispatch(fetchPosts(category)),
+    deletePost: post => dispatch(deletePost(post)),
     updateSortBy: sortBy => dispatch(updateSortBy(sortBy)),
     voteForPost: (post, option) => dispatch(voteForPost(post, option))
   }
