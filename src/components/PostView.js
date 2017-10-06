@@ -121,39 +121,41 @@ class PostView extends Component {
                 </small>
               </div>
               <p className='lead'>{post.body}</p>
-              <nav className='navbar navbar-light bg-faded mt-5'>
-                <div className='form-inline my-2 my-lg-0'>
-                  <CommentCount
-                    className='mr-3'
-                    count={(comments || []).length}
-                  />
-                  <div className='btn-group mr-3'>
-                    <button
-                      className='btn btn-secondary'
-                      onClick={() => this.showCommentModal()}
-                    >
-                      <CommentIcon className='align-text-top mr-2' />
-                      Add Comment
-                    </button>
+              <div className='row bg-faded mt-5'>
+                <div className='col col-md-auto py-2'>
+                  <div className='btn-group'>
                     <Link to={`${post.id}/edit`} className='btn btn-secondary'>
                       <PencilIcon className='align-text-top mr-2' />
                       Edit Post
                     </Link>
+                    <button
+                      className='btn btn-danger ml-auto'
+                      onClick={this.deletePost}
+                    >
+                      <TrashIcon className='align-text-top mr-2' />
+                      Delete Post
+                    </button>
                   </div>
+                </div>
+                <div className='col d-flex align-items-center flex-nowrap py-2'>
+                  <CommentCount
+                    className='mr-3'
+                    count={(comments || []).length}
+                  />
+                  <button
+                    className='btn btn-secondary mr-2'
+                    onClick={() => this.showCommentModal()}
+                  >
+                    <CommentIcon className='align-text-top mr-2' />
+                    Add Comment
+                  </button>
                   <SortBy
                     sortBy={this.props.sortBy}
                     onSortByChange={sortBy =>
                       this.props.updateSortCommentsBy(sortBy)}
                   />
-                  <button
-                    className='btn btn-danger ml-auto'
-                    onClick={this.deletePost}
-                  >
-                    <TrashIcon className='align-text-top mr-2' />
-                    Delete Post
-                  </button>
                 </div>
-              </nav>
+              </div>
               {comments.map(comment => (
                 <div key={comment.id} className='media mt-3'>
                   <VoteScore
