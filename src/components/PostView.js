@@ -12,7 +12,6 @@ import {
   fetchPost,
   voteForPost,
   deletePost,
-  fetchComments,
   createComment,
   updateComment,
   voteForComment,
@@ -33,9 +32,9 @@ class PostView extends Component {
   }
 
   componentDidMount () {
-    const id = this.props.match.params.id
-    this.props.fetchPost(id)
-    this.props.fetchComments(id)
+    if (!this.props.post) {
+      this.props.fetchPost(this.props.match.params.id)
+    }
   }
 
   deletePost = () => {
@@ -262,7 +261,6 @@ function mapDispatchToProps (dispatch) {
     fetchPost: id => dispatch(fetchPost(id)),
     voteForPost: (post, option) => dispatch(voteForPost(post, option)),
     deletePost: post => dispatch(deletePost(post)),
-    fetchComments: postId => dispatch(fetchComments(postId)),
     createComment: comment => dispatch(createComment(comment)),
     updateComment: (id, details) => dispatch(updateComment(id, details)),
     voteForComment: (comment, option) =>

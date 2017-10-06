@@ -122,8 +122,15 @@ describe('fetchPosts', () => {
 })
 
 describe('fetchPost', () => {
+  const post = { id: 13 }
+
+  beforeEach(() => {
+    API.fetchPost.mockImplementationOnce(() => Promise.resolve(post))
+  })
+
   afterEach(() => {
     API.fetchPost.mockClear()
+    API.fetchComments.mockClear()
   })
 
   it('should fetch the post with the given ID from the API', () => {
@@ -135,14 +142,24 @@ describe('fetchPost', () => {
   })
 
   it('should dispatch the RECEIVE_POST action with the post returned by the API', () => {
-    const post = { id: 13 }
-    API.fetchPost.mockImplementationOnce(() => Promise.resolve(post))
-
     return fetchPost(post.i)(dispatch).then(() => {
       expect(dispatch).toHaveBeenCalledWith({
         type: RECEIVE_POST,
         post
       })
+    })
+  })
+
+  it('should dispatch the fetchComments action for the post returned by the API', () => {
+    const stubDispatch = jest.fn(action => {
+      if (typeof action === 'function') {
+        action(dispatch)
+      }
+    })
+
+    return fetchPost(post.i)(stubDispatch).then(() => {
+      expect(API.fetchComments).toHaveBeenCalledTimes(1)
+      expect(API.fetchComments).toHaveBeenCalledWith(post.id)
     })
   })
 })

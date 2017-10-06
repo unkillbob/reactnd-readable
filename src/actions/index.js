@@ -49,6 +49,7 @@ export const receivePost = post => ({
 
 export const fetchPost = id => dispatch => {
   return API.fetchPost(id).then(post => {
+    dispatch(fetchComments(post.id))
     dispatch(receivePost(post))
   })
 }
